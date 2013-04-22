@@ -2,6 +2,7 @@
 import location
 import fox
 import plants
+import places
 
 class Sourroundings:
 
@@ -9,16 +10,14 @@ class Sourroundings:
         self.quadrants = dict()
         self.population = set()
         self.flora = set()
-        # places of animals are their attribute
         self.locationFactory = location.LocationFactory()        
     
     def populate(self):
+        biome = places.Biome() 
         foxlocation = self.locationFactory.create_random_location()
         self.population.add(fox.FoxFactory.create_fox(True,foxlocation))
         foxlocation = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
         self.population.add(fox.FoxFactory.create_fox(False,foxlocation))
-        #self.population.add(fox.FoxFactory.create_random_fox())
-        #self.population.add(fox.FoxFactory.create_random_fox()) 
         self.flora.add(plants.Tree())
         self.flora.add(plants.BroadLeafTree())
 
