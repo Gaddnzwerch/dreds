@@ -49,3 +49,19 @@ class Examine(Command):
     def execute(self):
         self.entity.examine(self.__other)
         self.finished = True
+class Enter(Command):
+    def __init__(self,a_entity,a_place):
+        Command.__init__(self,a_entity)
+        self.__place = a_place
+    def execute(self):
+        self.__place.enter(self.entity)
+        self.entity.enter(self.__place)
+        self.finished = True
+class Exit(Command):
+    def __init__(self,a_entity,a_place):
+        Command.__init__(self,a_entity)
+        self.__place = a_place
+    def execute(self):
+        self.__place.exit(self.entity)
+        self.entity.exit()
+        self.finished = True 

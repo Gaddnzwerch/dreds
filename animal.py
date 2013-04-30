@@ -1,6 +1,8 @@
 import location
 import plan
 import entity
+import location
+import places
 
 class Animal(entity.Entity):
     def __init__(self):
@@ -8,7 +10,7 @@ class Animal(entity.Entity):
         """logical states"""
         #self.__location = location.Location()
         """phyisical attributes"""
-        self.__speed = 2 #should be used by implementing class
+        self.__speed = 3 #should be used by implementing class
         self.__strength = 0
         self.__agility = 0
         """basic physical states"""
@@ -23,6 +25,7 @@ class Animal(entity.Entity):
         self.__places = set()
         self.__entities = set()
         self.__known = set()
+        self.__inside = None
     def get_speed(self):
         return self.__speed
     speed = property(get_speed)
@@ -79,6 +82,16 @@ class Animal(entity.Entity):
     def get_known(self):
         return self.__known
     known = property(get_known)
+
+    def get_places(self):
+        return self.__places
+    places = property(get_places)
+
+    def get_inside(self):
+        return self.__inside
+    def set_inside(self,a_place):
+        self.__inside = a_place 
+    inside = property(get_inside,set_inside)
 
     def add_exhaust(self,a_change):
         self.exhaust += a_change
@@ -162,7 +175,16 @@ class Animal(entity.Entity):
             print("The ", type(self).__name__, " now knows the ", type(a_other).__name__, "!")
             if self.is_same_species(a_other):
                 self.same_species.add(a_other)
+            if issubclass(a_other.__class__,places.Place):
+                print("Added to places")
+                self.places.add(a_other)
             self.known.add(a_other)
+
+    def enter(self,a_place):
+        self.inside = a_place
+
+    def exit(self):
+        self.inside = None
     
     def is_same_species(self,a_other):
         pass

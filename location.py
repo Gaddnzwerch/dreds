@@ -33,6 +33,13 @@ class Location:
         self.m_y += a_vector.y
         self.m_z += a_vector.z
 
+    def get_x(self):
+        return self.m_x
+    x = property(get_x)
+    def get_y(self):
+        return self.m_y
+    y = property(get_y)
+
 class Quadrant(Location):
     """
         A Quadrant is used to store objects wich are located near eachother.
