@@ -3,12 +3,15 @@ import location
 import fox
 import plants
 import places
+import gametime
+import vermin
 
 class Sourroundings:
 
     def __init__(self):
         self.quadrants = dict()
         self.population = set()
+        self.fauna = set()
         self.flora = set()
         self.places = set()
         self.locationFactory = location.LocationFactory()        
@@ -23,8 +26,17 @@ class Sourroundings:
         self.population.add(fox.FoxFactory.create_fox(False,foxlocation))
         self.flora.add(plants.Tree())
         self.flora.add(plants.BroadLeafTree())
+        self.flora.add(plants.Conifer())
 
-        for entity in self.population | self.flora | self.places:
+        maxVermin = 10000
+        noVermin = 0
+        while noVermin < maxVermin:
+            mouse = vermin.Mouse()
+            mouse.location = self.locationFactory.create_random_location()
+            self.fauna.add(mouse)
+            noVermin += 1
+
+        for entity in self.population | self.flora | self.places | self.fauna:
             try:
                 quadrant = entity.location.get_quadrant()
                 quadrant = self.quadrants[quadrant]
@@ -36,14 +48,14 @@ class Sourroundings:
 def main():
     sourroundings = Sourroundings()
     sourroundings.populate()
+    m_time = gametime.Gametime
 
-    i = 0
-    while True and i < 10:        
-        print("Round ", i)
+    while True and m_time.tickcount < 100:        
+        print("Round ", m_time.tickcount)
         for entity in sourroundings.population:
             entity.percieve(sourroundings)
             entity.life()
-        i += 1
+        m_time.nextTick()
 
 if __name__=='__main__':
     main() 

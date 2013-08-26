@@ -52,6 +52,10 @@ class BroadLeafTree(Tree):
 
     leafsPercent = property(get_leafs_percent)
 
+class Conifer(Tree):
+    def __init__(self):
+        Tree.__init__(self)
+
 class PlantFactory:    
     def create_plant(self):
         pass

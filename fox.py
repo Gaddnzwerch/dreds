@@ -9,7 +9,7 @@ class Foxes(animal.Mammal):
     maxExhaust = 100          #maxium Exhaust before collapse
     exhaustTired = .8         #Exhaust before the individual feels tired
     exhaustTiredReduce = .9   #how much exhaustTired is reduces when an individual collapses
-    minForHunger = 20         #hunger before i feels hungry
+    minForHunger = 20         #hunger before it feels hungry
 
     def __init__(self):
         animal.Mammal.__init__(self)
@@ -41,6 +41,8 @@ class Foxes(animal.Mammal):
        self.hunger += a_change
        if self.hunger < 0:
         self.hunger = 0
+       if self.isHungry != (self.hunger >= Fox.minForHunger):
+           print("The ", type(self).__name__, " is getting hungry") 
        self.isHungry = (self.hunger >= Fox.minForHunger)
 
     """actions"""

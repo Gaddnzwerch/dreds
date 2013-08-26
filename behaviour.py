@@ -34,10 +34,12 @@ class BehaviourIdle(Behaviour):
                 m_interested = random.sample(unknown,1)[0]
                 self.__parent.animal.plans.append(plan.Move(self.__parent.animal,m_interested.location))
                 self.__parent.animal.plans.append(plan.Examine(self.__parent.animal,m_interested))
-            elif len(places) > 0:
-                m_place = random.sample(places,1)[0]
-                self.__parent.animal.plans.append(plan.Enter(self.__parent.animal,m_place))
-                self.__parent.animal.plans.append(plan.Exit(self.__parent.animal,m_place))
+                """
+                elif len(places) > 0:
+                    m_place = random.sample(places,1)[0]
+                    self.__parent.animal.plans.append(plan.Enter(self.__parent.animal,m_place))
+                    self.__parent.animal.plans.append(plan.Exit(self.__parent.animal,m_place))
+                """
             else:
                 self.__parent.animal.idle()
 
@@ -68,7 +70,9 @@ class BehaviourHunt(Behaviour):
     def act(self):
         #TODO hunt
         try:
-            self.__parent.animal.move()
+            # TODO hunt what?
+            # self.__parent.animal.move()
+            pass
         except errors.HungryError:
             pass
         if random.randint(0,10) < 2:    

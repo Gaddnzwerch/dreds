@@ -14,6 +14,7 @@ class Biome():
         self.__lightHeight = a_height
     lightHeight = property(get_light_height,set_light_height)
 
+
 class Path(deque):
     def __init__(self):
         deque.__init__(self)
@@ -54,6 +55,9 @@ class Place():
     name = property(get_name,set_name)
 
 class Den(Place):
+    """
+        A place individuals can enter and leave.
+    """
     def __init__(self,a_name,a_location):
         Place.__init__(self,a_name,a_location)
         self.__contain = set()
