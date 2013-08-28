@@ -8,13 +8,12 @@ class Plan(collections.deque):
         collections.deque.__init__(self)
     def execute(self):
         command = self.popleft()
+        print('Execute ' , type(self).__name__ , type(command).__name__)
         command.execute()
         if command.finished:
             pass
         else:
             self.appendleft(command)
-    def empty(self):
-        pass
 class Command():
     """
         Commands are the smalest unit. They can be executed by an entity.
@@ -41,6 +40,15 @@ class Move(Command):
        if self.entity.location != self.__to:
         self.entity.move(self.__to)
        self.finished = self.entity.location == self.__to 
+
+class Feed(Command):
+    def __init__(self,a_entity,a_nutrition):
+        Command.__init__(self,a_entity)
+        self.__nutrition = a_nutrition
+    def execute(self):
+        self.entity.feed(self.__nutrition)
+        self.__nutrition = None
+        self.finished = True
 
 class Examine(Command):
     def __init__(self,a_entity,a_other):

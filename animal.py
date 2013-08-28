@@ -3,6 +3,7 @@ import plan
 import entity
 import location
 import places
+import nutrition
 
 class Animal(entity.Entity):
     def __init__(self):
@@ -23,9 +24,9 @@ class Animal(entity.Entity):
         self.__sameSpecies = set()
         self.__plans = plan.Plan()
         self.__places = set()
-        self.__entities = set()
         self.__known = set()
         self.__inside = None
+        self.__foodSources = set()
     def get_speed(self):
         return self.__speed
     speed = property(get_speed)
@@ -58,18 +59,14 @@ class Animal(entity.Entity):
 
     dirty = property(get_dirty,set_dirty)
 
-    """
-    def get_location(self):
-        return self.__location
-
-    def set_location(self, a_location):
-        self.__location = a_location
-    location = property(get_location,set_location)
-    """ 
     def get_noticed(self):
         return self.__noticed
     
     noticed = property(get_noticed)
+
+    def get_food_sources(self):
+        return self.__foodSources
+    food_sources = property(get_food_sources)
 
     def get_same_species(self):
         return self.__sameSpecies
@@ -151,15 +148,13 @@ class Animal(entity.Entity):
         self.boredness += 1
         self.add_exhaust(-5)
 
-    def feed(self):
-        #TODO what do we feed?
-        print('The ', type(self).__name__ ,' feeds')
-        self.add_hunger(-50)
+    def feed(self,a_nutrition):
+        self.add_hunger(-a_nutrition.nutrition_value)
         self.add_exhaust(1)
         self.dirty += 10
-        self.boredness -= 1 
-        #TODO has to depend on personality
+        self.boredness -= 1
         self.satisfaction += 50
+        a_nutrition.get_consumed()
 
     def percieve(self,a_sourrounding):
         #TODO just see everything in the same quadrant
@@ -169,6 +164,23 @@ class Animal(entity.Entity):
                 if entity not in self.__noticed:                
                     self.__noticed.add(entity) 
                     print("The ", type(self).__name__,' at ', self.location, ' noticed the ', type(entity).__name__, ' which is %d units away.' % (self.location.get_distance(entity.location)))
+                    if issubclass(entity.__class__, nutrition.Nutrition):
+                        self.food_sources.add(entity)
+                        print("The ", type(entity).__name__ , " is edible for the " , type(self).__name__)
+        self.unque()                       
+    
+    def unque(self):
+        remove = set()
+        for entity in self.noticed | self.food_sources | self.known:
+            if not entity.active:
+                remove.add(entity)
+
+        for entity in remove:
+            self.noticed.remove(entity)
+            self.food_sources.remove(entity)
+            self.known.remove(entity)
+        remove.clear
+            
     
     def examine(self,a_other):
         if a_other not in self.known:

@@ -67,16 +67,27 @@ class BehaviourRest(Behaviour):
 class BehaviourHunt(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
+        print("The ", type(self.__parent.animal).__name__, " is hunting ")
     def act(self):
         #TODO hunt
         try:
-            # TODO hunt what?
-            # self.__parent.animal.move()
-            pass
+            self.__parent.animal.plans.execute()
+        except IndexError:            
+            # find something to hunt
+            prey = None
+            try:
+                prey = random.sample(self.__parent.animal.food_sources,1)[0] 
+            except ValueError:
+                pass #TODO no food known yet
+            if prey:
+                # move to it 
+                self.__parent.animal.plans.append(plan.Move(self.__parent.animal,prey.location))
+                # catch it
+                # TODO
+                # consume it
+                self.__parent.animal.plans.append(plan.Feed(self.__parent.animal,prey))
         except errors.HungryError:
             pass
-        if random.randint(0,10) < 2:    
-            self.__parent.animal.feed()
     def state_check(self):
         if self.__parent.animal.is_exhausted():
             return BehaviourRest(self.__parent)    

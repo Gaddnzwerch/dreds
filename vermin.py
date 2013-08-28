@@ -1,6 +1,7 @@
 import entity
+import nutrition
 
-class Vermin(entity.Entity):
+class Vermin(entity.Entity, nutrition.Nutrition):
     """
         Vermin are small animals that are not cared of individually
     """
@@ -15,5 +16,5 @@ class Vermin(entity.Entity):
 class Mouse(Vermin):
     
     def __init__(self):
-       Vermin.__init__(self,5) 
+       Vermin.__init__(self,100) 
         

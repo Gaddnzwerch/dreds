@@ -24,15 +24,15 @@ class Sourroundings:
         self.places.add(places.Den("Fox-Den",foxlocation))
         foxlocation = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
         self.population.add(fox.FoxFactory.create_fox(False,foxlocation))
-        self.flora.add(plants.Tree())
-        self.flora.add(plants.BroadLeafTree())
-        self.flora.add(plants.Conifer())
+        #self.flora.add(plants.Tree())
+        #self.flora.add(plants.BroadLeafTree())
+        #self.flora.add(plants.Conifer())
 
-        maxVermin = 10000
+        maxVermin = 5
         noVermin = 0
         while noVermin < maxVermin:
             mouse = vermin.Mouse()
-            mouse.location = self.locationFactory.create_random_location()
+            mouse.location = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
             self.fauna.add(mouse)
             noVermin += 1
 
@@ -48,13 +48,25 @@ class Sourroundings:
 def main():
     sourroundings = Sourroundings()
     sourroundings.populate()
-    m_time = gametime.Gametime
+    remove = set()
+    m_time = gametime.Gametime    
 
     while True and m_time.tickcount < 100:        
-        print("Round ", m_time.tickcount)
+        print("Round ", m_time.tickcount)        
         for entity in sourroundings.population:
             entity.percieve(sourroundings)
             entity.life()
+
+        for entity in sourroundings.fauna:
+            if not entity.active:
+                remove.add(entity)
+
+        for entity in remove:
+            quadrant = entity.location.get_quadrant()
+            quadrant = sourroundings.quadrants[quadrant]
+            quadrant.get_inhabitants().remove(entity)
+            sourroundings.fauna.remove(entity)
+        remove.clear()            
         m_time.nextTick()
 
 if __name__=='__main__':

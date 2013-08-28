@@ -41,6 +41,13 @@ class Place():
     def __init__(self,a_name,a_location):
         self.__location = location.Location(a_location.x,a_location.y)
         self.__name = a_name
+        self.__active = True
+
+    def get_active(self):
+        return self.__active
+    def set_active(self,a_active):
+        self.__active = a_actvie
+    active = property(get_active, set_active)        
 
     def get_location(self):
         return self.__location

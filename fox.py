@@ -9,7 +9,7 @@ class Foxes(animal.Mammal):
     maxExhaust = 100          #maxium Exhaust before collapse
     exhaustTired = .8         #Exhaust before the individual feels tired
     exhaustTiredReduce = .9   #how much exhaustTired is reduces when an individual collapses
-    minForHunger = 20         #hunger before it feels hungry
+    minForHunger = 50         #hunger before it feels hungry
 
     def __init__(self):
         animal.Mammal.__init__(self)
