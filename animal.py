@@ -176,9 +176,12 @@ class Animal(entity.Entity):
                 remove.add(entity)
 
         for entity in remove:
-            self.noticed.remove(entity)
-            self.food_sources.remove(entity)
-            self.known.remove(entity)
+            try:
+                self.noticed.remove(entity)
+                self.food_sources.remove(entity)
+                self.known.remove(entity)
+            except KeyError:
+                pass
         remove.clear
             
     

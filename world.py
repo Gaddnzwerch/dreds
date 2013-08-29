@@ -58,6 +58,7 @@ def main():
             entity.life()
 
         for entity in sourroundings.fauna:
+            entity.ageing()
             if not entity.active:
                 remove.add(entity)
 
