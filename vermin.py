@@ -21,7 +21,7 @@ class Mouse(Vermin):
 
     def ageing(self):
         super(Mouse, self).ageing()
-        #TODO make up a proper algorithm
-        if (random.random() * 100 - self.age) < 0:
+        randomint = random.randrange(100-self.age) 
+        if randomint == 1:
             self.active = False
 

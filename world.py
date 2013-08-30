@@ -37,13 +37,25 @@ class Sourroundings:
             noVermin += 1
 
         for entity in self.population | self.flora | self.places | self.fauna:
-            try:
-                quadrant = entity.location.get_quadrant()
-                quadrant = self.quadrants[quadrant]
-            except KeyError:
-                self.quadrants[quadrant] = quadrant
-            finally:
-                quadrant.get_inhabitants().add(entity)
+            self.__add_entity(entity)
+    
+    def vermin(self):
+        mouse = vermin.Mouse()
+        mouse.location = self.locationFactory.create_random_location()
+        self.fauna.add(mouse)
+        self.__add_entity(mouse)
+        print(len(self.fauna))
+            
+    def __add_entity(self,a_entity):
+        try:
+            quadrant = a_entity.location.get_quadrant()
+            quadrant = self.quadrants[quadrant]
+        except KeyError:
+            self.quadrants[quadrant] = quadrant
+        finally:
+            quadrant.get_inhabitants().add(a_entity)
+    
+        
 
 def main():
     sourroundings = Sourroundings()
@@ -68,6 +80,7 @@ def main():
             quadrant.get_inhabitants().remove(entity)
             sourroundings.fauna.remove(entity)
         remove.clear()            
+        sourroundings.vermin()
         m_time.nextTick()
 
 if __name__=='__main__':
