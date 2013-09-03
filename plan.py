@@ -8,7 +8,6 @@ class Plan(collections.deque):
         collections.deque.__init__(self)
     def execute(self):
         command = self.popleft()
-        print('Execute ' , type(self).__name__ , type(command).__name__)
         command.execute()
         if command.finished:
             pass
@@ -46,7 +45,8 @@ class Feed(Command):
         Command.__init__(self,a_entity)
         self.__nutrition = a_nutrition
     def execute(self):
-        self.entity.feed(self.__nutrition)
+        if self.__nutrition.active:
+            self.entity.feed(self.__nutrition)
         self.__nutrition = None
         self.finished = True
 
@@ -57,6 +57,7 @@ class Examine(Command):
     def execute(self):
         self.entity.examine(self.__other)
         self.finished = True
+
 class Enter(Command):
     def __init__(self,a_entity,a_place):
         Command.__init__(self,a_entity)
@@ -65,6 +66,7 @@ class Enter(Command):
         self.__place.enter(self.entity)
         self.entity.enter(self.__place)
         self.finished = True
+
 class Exit(Command):
     def __init__(self,a_entity,a_place):
         Command.__init__(self,a_entity)

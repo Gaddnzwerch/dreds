@@ -5,11 +5,11 @@ import gender
 import random
 import location
 
-class Foxes(animal.Mammal):
+class Foxes(animal.Mammal,animal.DenInhabitant):
     maxExhaust = 100          #maxium Exhaust before collapse
     exhaustTired = .8         #Exhaust before the individual feels tired
     exhaustTiredReduce = .9   #how much exhaustTired is reduces when an individual collapses
-    minForHunger = 50         #hunger before it feels hungry
+    minForHunger = 20         #hunger before it feels hungry
 
     def __init__(self):
         animal.Mammal.__init__(self)

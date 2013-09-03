@@ -1,4 +1,5 @@
 import random
+import mathematics
 
 class Location:
     """
@@ -39,6 +40,10 @@ class Location:
     def get_y(self):
         return self.m_y
     y = property(get_y)
+
+    def get_z(self):
+        return self.m_z
+    z = property(get_z)
 
 class Quadrant(Location):
     """
@@ -87,8 +92,11 @@ class LocationFactory:
     """
         Creates new locations.
     """
-    def create_random_location():
-        return Location(random.randint(1,32000),random.randint(1,32000),Location.standardZ)
+    #def create_random_location():
+    #    return Location(random.randint(1,32000),random.randint(1,32000),Location.standardZ)
+
+    def create_random_location(a_minX, a_maxX, a_minY , a_maxY):
+        return Location(random.randint(a_minX, a_maxX),random.randint(a_minY,a_maxY),Location.standardZ)
     create_random_location = staticmethod(create_random_location)
 
     def create_location_around(a_oldLocation,a_minDistance, a_maxDistanceX, a_maxDistanceY, a_maxDistanceZ):
@@ -124,45 +132,3 @@ class LocationFactory:
         return Location(newX,newY,newZ)
     create_location_in_quadrant = staticmethod(create_location_in_quadrant)
 
-class Vector:
-    def __init__(self,a_location1,a_location2):
-        self.__dirX = a_location2.m_x - a_location1.m_x + 0.0
-        self.__dirY = a_location2.m_y - a_location1.m_y + 0.0
-        self.__dirZ = a_location2.m_z - a_location1.m_z + 0.0
-        self.__length = 0.0
-    def get_x(self):
-        return self.__dirX
-    def set_x(self,a_x):
-        self.__length = 0.0
-        self.__dirX = a_x
-    x = property(get_x,set_x)
-
-    def get_y(self):
-        return self.__dirY
-    def set_y(self,a_y):
-        self.__length = 0.0
-        self.__dirY = a_y
-    y = property(get_y,set_y)
-
-    def get_z(self):
-        return self.__dirZ
-    def set_z(self,a_z):
-        self.__length = 0.0
-        self.__dirZ = a_z
-    z = property(get_z,set_z)
-
-    def get_length(self):
-        if self.__length != 0.0:
-            return self.__length
-        else:
-            self.__length = (self.__dirX**2 + self.__dirY**2 + self.__dirZ**2)**0.5
-            return self.__length
-    def set_length(self,a_length):
-        self.__dirX = (self.x / self.length) * a_length
-        self.__dirY = (self.y / self.length) * a_length
-        self.__dirZ = (self.z / self.length) * a_length
-        self.__length = a_length
-    length = property(get_length,set_length) 
-    
-    def __str__(self):
-        return ('x%f,y%f,z%f') % (self.x,self.y,self.z)

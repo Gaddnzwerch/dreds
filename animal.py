@@ -4,6 +4,7 @@ import entity
 import location
 import places
 import nutrition
+import mathematics
 
 class Animal(entity.Entity):
     def __init__(self):
@@ -107,7 +108,7 @@ class Animal(entity.Entity):
         self.dirty += 1
 
     def move(self,a_location):
-        m_vector = location.Vector(self.location,a_location)
+        m_vector = mathematics.Vector(self.location,a_location)
         if self.__speed > 0:
             if m_vector.length >= self.__speed:
                 m_vector.length = self.__speed
@@ -143,7 +144,6 @@ class Animal(entity.Entity):
         raise Errors.CollapseError()
 
     def idle(self):
-        print('The ', type(self).__name__, ' does nothing')
         self.add_hunger(1)
         self.boredness += 1
         self.add_exhaust(-5)
@@ -155,6 +155,7 @@ class Animal(entity.Entity):
         self.boredness -= 1
         self.satisfaction += 50
         a_nutrition.get_consumed()
+        print("The " , type(self).__name__, " feeds the " , type(a_nutrition).__name__ , ". Remaining hunger: " , self.hunger, " " , self.is_hungry())
 
     def percieve(self,a_sourrounding):
         #TODO just see everything in the same quadrant
@@ -163,10 +164,8 @@ class Animal(entity.Entity):
             if entity != self:
                 if entity not in self.__noticed:                
                     self.__noticed.add(entity) 
-                    print("The ", type(self).__name__,' at ', self.location, ' noticed the ', type(entity).__name__, ' which is %d units away.' % (self.location.get_distance(entity.location)))
                     if issubclass(entity.__class__, nutrition.Nutrition):
                         self.food_sources.add(entity)
-                        print("The ", type(entity).__name__ , " is edible for the " , type(self).__name__)
         self.unque()                       
     
     def unque(self):
@@ -187,12 +186,14 @@ class Animal(entity.Entity):
     
     def examine(self,a_other):
         if a_other not in self.known:
-            print("The ", type(self).__name__, " now knows the ", type(a_other).__name__, "!")
             if self.is_same_species(a_other):
                 self.same_species.add(a_other)
             if issubclass(a_other.__class__,places.Place):
-                print("Added to places")
                 self.places.add(a_other)
+                if issubclass(self.__class__,DenInhabitant):
+                    #TODO test if the den is occupied
+                    print("The ", type(self).__name__, " made the ", type(a_other).__name__, " its den!")
+                    self.den = a_other
             self.known.add(a_other)
 
     def enter(self,a_place):
@@ -219,6 +220,14 @@ class Mammal(Animal):
     def have_sex(self,a_with):
         pass
 
+class DenInhabitant():
+    def __init__(self):
+        self.__den = None
+    def get_den(self):
+        return self.__den
+    def set_den(self,a_den):
+        self.__den = a_den
+    den =  property(get_den,set_den)
 """
     Belong more in Behaviour?
 """

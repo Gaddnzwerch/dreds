@@ -26,8 +26,7 @@ class BehaviourIdle(Behaviour):
         try:
             self.__parent.animal.plans.execute()
         except IndexError:
-            #TODO DEBUG
-            print("The ", type(self.__parent.animal).__name__, " has no plan")
+            #TODO 
             unknown = self.__parent.animal.noticed - self.__parent.animal.known
             places = self.__parent.animal.places
             if len(unknown) > 0:
@@ -67,7 +66,6 @@ class BehaviourRest(Behaviour):
 class BehaviourHunt(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
-        print("The ", type(self.__parent.animal).__name__, " is hunting ")
     def act(self):
         #TODO hunt
         try:
@@ -76,6 +74,7 @@ class BehaviourHunt(Behaviour):
             # find something to hunt
             prey = None
             try:
+                #TODO find the best prey
                 prey = random.sample(self.__parent.animal.food_sources,1)[0] 
             except ValueError:
                 pass #TODO no food known yet
