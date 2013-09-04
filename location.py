@@ -1,57 +1,26 @@
 import random
 import mathematics
 
-class Location:
+class Location(mathematics.Point):
     """
-        Basic type to store a location. A technical class for calulation purposes.
+        A representation for a point
     """
-    standardZ = 1
-    def __init__(self,a_x=0, a_y=0, a_z=standardZ):
-        self.m_x = a_x
-        self.m_y = a_y
-        self.m_z = a_z
-    def __eq__(self,other):
-        if type(self) == type(other):
-            return self.m_x == other.m_x and self.m_y == other.m_y and self.m_z == other.m_z
-        else:
-            return False
-    def __hash__(self):
-        return(hash("%s%6d%6d%6d" % (type(self).__name__,self.m_x,self.m_y,self.m_z)))  
-        
-    def __str__(self):
-        return("x:%d,y:%d,z:%d" % (self.m_x, self.m_y, self.m_z))
-    def get_array(self):
-        return [self.m_x,self.m_y,self.m_z]
-
-    def get_distance(self,a_location): 
-        return Line(self.get_array(),a_location.get_array()).distance()
+    def __init__(self,a_x=0, a_y=0, a_z=0):
+        super(Location,self).__init__(a_x,a_y,a_z)
 
     def get_quadrant(self):
         return Quadrant(int(self.m_x/Quadrant.resolution),int(self.m_y/Quadrant.resolution),int(self.m_z/Quadrant.resolution))
 
-    def add(self,a_vector):
-        self.m_x += a_vector.x
-        self.m_y += a_vector.y
-        self.m_z += a_vector.z
-
-    def get_x(self):
-        return self.m_x
-    x = property(get_x)
-    def get_y(self):
-        return self.m_y
-    y = property(get_y)
-
-    def get_z(self):
-        return self.m_z
-    z = property(get_z)
-
+    def get_distance(self,a_location): 
+        return Line(self.get_array(),a_location.get_array()).distance()
+    
 class Quadrant(Location):
     """
         A Quadrant is used to store objects wich are located near eachother.
     """
     resolution = 10 #Points per Dimension in a Quadrant
     def __init__(self,a_x,a_y,a_z):
-        Location.__init__(self,a_x,a_y,a_z)
+        super(Quadrant,self).__init__(a_x,a_y,a_z)
         self.__inhabitants = set()
 
     __hash__ = Location.__hash__

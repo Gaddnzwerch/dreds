@@ -1,13 +1,13 @@
 import copy
-import location
+#import location
 
 class Vector():
-    def __init__(self,a_location1,a_location2):
-        self.__origin = a_location1
-        self.__target = a_location2
-        self.__dirX = a_location2.m_x - a_location1.m_x + 0.0
-        self.__dirY = a_location2.m_y - a_location1.m_y + 0.0
-        self.__dirZ = a_location2.m_z - a_location1.m_z + 0.0
+    def __init__(self,a_point1,a_point2):
+        self.__origin = a_point1
+        self.__target = a_point2
+        self.__dirX = a_point2.m_x - a_point1.m_x + 0.0
+        self.__dirY = a_point2.m_y - a_point1.m_y + 0.0
+        self.__dirZ = a_point2.m_z - a_point1.m_z + 0.0
         self.__length = 0.0
     def get_x(self):
         return self.__dirX
@@ -44,14 +44,14 @@ class Vector():
     length = property(get_length,set_length) 
     
     def __str__(self):
-        return ('x%f,y%f,z%f') % (self.x,self.y,self.z)
+        return ('Vector %s->%s') % (self.origin.__str__(), self.target.__str__())
     
     def get_origin(self):
         return self.__origin
     origin = property(get_origin)
 
     def get_target(self):
-        return Location(self.__origin.x + self.__dirX, self.__origin.y + self.__dirY, self.__origin.z + self.__dirZ)
+        return Point(self.__origin.x + self.__dirX, self.__origin.y + self.__dirY, self.__origin.z + self.__dirZ)
     target = property(get_target)
 
     def dot_product(self,a_vector):
@@ -80,6 +80,18 @@ class Flat():
         else:
             raise Exception("Vectors don't have the same origin")
     
+    def get_vector1(self):
+        return self.__vector1
+    vector1 = property(get_vector1)
+
+    def get_vector2(self):
+        return self.__vector2
+    vector2 = property(get_vector2)
+
+    def get_vector3(self):
+        return Vector(self.__vector1.target,self.__vector2.target)
+    vector3 = property(get_vector3)
+    
     def get_normal(self):
         return self.__normal
     normal = property(get_normal)
@@ -88,7 +100,7 @@ class Flat():
         return self.__vector1.origin
     origin = property(get_origin)
     
-    def is_location_in(self,a_location):
+    def is_point_in(self,a_point):
         """
             Returns true if the x,y value of a loctation lies in the baseplain of the flat (z=0)
             Algorithm from http://www.blackpawn.com/texts/pointinpoly/default.html
@@ -97,7 +109,7 @@ class Flat():
         v1.z = 0
         v2 = copy.copy(self.__vector2)
         v2.z = 0
-        v3 = Vector(self.__vector1.origin,a_location)
+        v3 = Vector(self.__vector1.origin,a_point)
         v3.z = 0
         
         # Compute dot products
@@ -115,12 +127,46 @@ class Flat():
         # Check if point is in triangle
         return (u >= 0) and (v >= 0) and (u + v < 1)
     
-    def get_z(self, a_location):
-        direction = Vector(location.Location(0,0,0),location.Location(0,0,1))
-        t = ((self.origin.x * self.normal.x) + (self.origin.y * self.normal.y) + (self.origin.z * self.normal.z) - (self.normal.x * a_location.x) - (self.normal.y * a_location.y) - (self.normal.z * a_location.z)) / ((self.normal.x * direction.x) + (self.normal.y * direction.y) + (self.normal.z * direction.z))
-        return a_location.z + (direction.z * t)
+    def get_z(self, a_point):
+        direction = Vector(Point(0,0,0),Point(0,0,1))
+        t = ((self.origin.x * self.normal.x) + (self.origin.y * self.normal.y) + (self.origin.z * self.normal.z) - (self.normal.x * a_point.x) - (self.normal.y * a_point.y) - (self.normal.z * a_point.z)) / ((self.normal.x * direction.x) + (self.normal.y * direction.y) + (self.normal.z * direction.z))
+        return a_point.z + (direction.z * t)
         
+    def get_circumscribed_circle(self):
+        """
+        Idea from http://www.ics.uci.edu/~eppstein/junkyard/circumcenter.html
+        p_0 = (((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_1 - c_1) 
+            -  ((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_1 - c_1)) 
+            / D
 
+        p_1 = (((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_0 - c_0)
+            -  ((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_0 - c_0))
+            / D
+
+        where D = (a_0 - c_0) * (b_1 - c_1) - (b_0 - c_0) * (a_1 - c_1)
+
+        The _squared_ circumradius is then:
+
+        r^2 = (c_0 - p_0)^2 + (c_1 - p_1)^2
+        """
+        a_0 = self.vector1.origin.x
+        a_1 = self.vector1.origin.y
+        b_0 = self.vector1.target.x
+        b_1 = self.vector1.target.y
+        c_0 = self.vector2.target.x
+        c_1 = self.vector2.target.y
+        D = (a_0 - c_0) * (b_1 - c_1) - (b_0 - c_0) * (a_1 - c_1)
+
+        p_0 = (((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_1 - c_1) -  ((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_1 - c_1)) / D
+        p_1 = (((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_0 - c_0) -  ((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_0 - c_0)) / D
+        p = Point(p_0,p_1,0)
+        r = ((c_0 - p_0)**2 + (c_1 - p_1)**2)**0.5
+        print("DEBUG: mathematics.Flat.get_circumscribed_circle - ", p, " : ", r)
+
+        return Circle(Point(p_0,p_1),r)
+    
+    def get_area(self):
+        return (((self.vector1.length + self.vector2.length + self.vector3.length)*(self.vector1.length + self.vector2.length + self.vector3.length)*(self.vector2.length + self.vector3.length - self.vector1.length)*(self.vector3.length + self.vector2.length - self.vector1.length)**0.5)/4)
 
     def GetIntersectionEG(Ep, Er1, Er2, Gp, Gr):
         """
@@ -135,3 +181,71 @@ class Flat():
         t = ((Ep.x*cross.x)+(Ep.y*cross.y)+(Ep.z*cross.z)-(cross.x*Gp.x)-(cross.y*Gp.y)-(cross.z*Gp.z))/((cross.x*Gr.x)+(cross.y*Gr.y)+(cross.z*Gr.z))
         S = c4d.Vector(Gp.x + (Gr.x * t),Gp.y + (Gr.y * t),Gp.z + (Gr.z * t))
         return S
+
+    def get_points(self):
+        points = set()
+        points.add(self.__vector1.origin)
+        points.add(self.__vector1.target)
+        points.add(self.__vector2.target)
+        return points
+    points = property(get_points)
+
+    def is_adjacent(self, a_other_flat):
+        return(len(a_other_flat.points & self.points)>0)
+
+    def __str__(self):
+        return ('Area %s %s') % (self.vector1,self.vector2)
+
+class Point():    
+    """
+        Basic type to store a location. A technical class for calulation purposes.
+    """
+    standardZ = 1
+    def __init__(self,a_x=0, a_y=0, a_z=standardZ):
+        self.m_x = a_x
+        self.m_y = a_y
+        self.m_z = a_z
+    def __eq__(self,other):
+        if type(self) == type(other):
+            return self.m_x == other.m_x and self.m_y == other.m_y and self.m_z == other.m_z
+        else:
+            return False
+    def __hash__(self):
+        return(hash("%s%6d%6d%6d" % (type(self).__name__,self.m_x,self.m_y,self.m_z)))  
+        
+    def __str__(self):
+        return("Point x:%d,y:%d,z:%d" % (self.m_x, self.m_y, self.m_z))
+    def get_array(self):
+        return [self.m_x,self.m_y,self.m_z]
+
+    def add(self,a_vector):
+        self.m_x += a_vector.x
+        self.m_y += a_vector.y
+        self.m_z += a_vector.z
+
+    def get_x(self):
+        return self.m_x
+    x = property(get_x)
+
+    def get_y(self):
+        return self.m_y
+    y = property(get_y)
+
+    def get_z(self):
+        return self.m_z
+    z = property(get_z)
+
+class Circle():
+    """
+        As the name says it
+    """
+    def __init__(self, a_point, a_radius):
+        self.__center = a_point
+        self.__radius = a_radius
+    
+    def is_point_in(self,a_point):
+       print ("DEBUG: mathematics.Circle.is_point_in - ", self.__center, a_point, self.__radius)
+       return ((self.__center.x - a_point.x)**2 + ((self.__center.y - a_point.y)**2)) <= self.__radius**2 
+    
+    def __str__(self):
+        return ("Circle  %s radius %s") % (self.__center, self.__radius)

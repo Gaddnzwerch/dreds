@@ -1,0 +1,8 @@
+- Generate Terrain
+    - generate a map of height distribution (x, y associated to a z-value)
+    - convert a map of heights to flats (Delaunay Triangulation)
+- General Math
+    + circumscribed circle
+    + point in circle
+    - test if a vector intersects a triangle
+- Pathfinding    

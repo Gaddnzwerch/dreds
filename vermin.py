@@ -17,7 +17,7 @@ class Vermin(entity.Entity, nutrition.Nutrition):
 class Mouse(Vermin):
     
     def __init__(self):
-       Vermin.__init__(self,100) 
+       super(Mouse, self).__init__(100) 
 
     def ageing(self):
         super(Mouse, self).ageing()

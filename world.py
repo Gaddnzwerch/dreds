@@ -20,8 +20,11 @@ class Sourroundings:
         self.locationFactory = location.LocationFactory()        
         self.MAXX = 100
         self.MAXY = 100
+        #TEST 
+        self.terrain = terrain.Terrain()
     
     def populate(self):
+        self.terrain.add_point(self.locationFactory.create_random_location(1,self.MAXX,1,self.MAXY))
         biome = places.Biome() 
         foxlocation = self.locationFactory.create_random_location(1,self.MAXX,1,self.MAXY)
         self.population.add(fox.FoxFactory.create_fox(True,foxlocation))
@@ -67,7 +70,7 @@ def main():
     remove = set()
     m_time = gametime.Gametime    
 
-    while True and m_time.tickcount < 1000:        
+    while True and m_time.tickcount < 1:        
         print("Round ", m_time.tickcount)        
         for entity in sourroundings.population:
             oldQuadrant = entity.location.get_quadrant()
@@ -112,11 +115,16 @@ def main():
     except Exception:
         pass
     flat3 = mathematics.Flat(v4,v5)
-    print(flat3.is_location_in(location.Location(0.5,0.5,0)))
-    print(flat3.is_location_in(location.Location(1,1,100)))
+    print(flat3.is_point_in(location.Location(0.5,0.5,0)))
+    print(flat3.is_point_in(location.Location(1,1,100)))
     flat4 = mathematics.Flat(v6,v7)
+    print(flat4)
+    circle0 = flat4.get_circumscribed_circle()
+    print(flat4.get_area())
     print(flat4.normal)
     print(flat4.get_z(location.Location(1,1,0)))
+    circle1 = flat1.get_circumscribed_circle()
+    print(circle0, circle1)
 
 if __name__=='__main__':
     main() 
