@@ -77,6 +77,7 @@ class Flat():
             self.__vector1 = a_vector1
             self.__vector2 = a_vector2
             self.__normal = self.__vector1.cross_product(self.__vector2)
+            self.__circumscribed_circle = None
         else:
             raise Exception("Vectors don't have the same origin")
     
@@ -149,21 +150,25 @@ class Flat():
 
         r^2 = (c_0 - p_0)^2 + (c_1 - p_1)^2
         """
-        a_0 = self.vector1.origin.x
-        a_1 = self.vector1.origin.y
-        b_0 = self.vector1.target.x
-        b_1 = self.vector1.target.y
-        c_0 = self.vector2.target.x
-        c_1 = self.vector2.target.y
-        D = (a_0 - c_0) * (b_1 - c_1) - (b_0 - c_0) * (a_1 - c_1)
+        if not self.__circumscribed_circle:
+            a_0 = self.vector1.origin.x
+            a_1 = self.vector1.origin.y
+            b_0 = self.vector1.target.x
+            b_1 = self.vector1.target.y
+            c_0 = self.vector2.target.x
+            c_1 = self.vector2.target.y
+            D = (a_0 - c_0) * (b_1 - c_1) - (b_0 - c_0) * (a_1 - c_1)
+            if D == 0:
+                print("DEBUG: mathematics.Flat.get_circumscribed_circle [D = 0] - ",  a_0, a_1, b_0, b_1, c_0, c_1)
 
-        p_0 = (((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_1 - c_1) -  ((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_1 - c_1)) / D
-        p_1 = (((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_0 - c_0) -  ((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_0 - c_0)) / D
-        p = Point(p_0,p_1,0)
-        r = ((c_0 - p_0)**2 + (c_1 - p_1)**2)**0.5
-        print("DEBUG: mathematics.Flat.get_circumscribed_circle - ", p, " : ", r)
+            p_0 = (((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_1 - c_1) -  ((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_1 - c_1)) / D
+            p_1 = (((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_0 - c_0) -  ((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_0 - c_0)) / D
+            p = Point(p_0,p_1,0)
+            r = ((c_0 - p_0)**2 + (c_1 - p_1)**2)**0.5
+            self.__circumscribed_circle = Circle(Point(p_0,p_1),r)
+            # print("DEBUG: mathematics.Flat.get_circumscribed_circle - ", p, " : ", r) 
 
-        return Circle(Point(p_0,p_1),r)
+        return self.__circumscribed_circle
     
     def get_area(self):
         return (((self.vector1.length + self.vector2.length + self.vector3.length)*(self.vector1.length + self.vector2.length + self.vector3.length)*(self.vector2.length + self.vector3.length - self.vector1.length)*(self.vector3.length + self.vector2.length - self.vector1.length)**0.5)/4)
@@ -190,6 +195,7 @@ class Flat():
         return points
     points = property(get_points)
 
+
     def is_adjacent(self, a_other_flat):
         return(len(a_other_flat.points & self.points)>0)
 
@@ -206,12 +212,12 @@ class Point():
         self.m_y = a_y
         self.m_z = a_z
     def __eq__(self,other):
-        if type(self) == type(other):
+        if type(self) == type(other) or issubclass(self.__class__,other.__class__) or issubclass(other.__class__,self.__class__):
             return self.m_x == other.m_x and self.m_y == other.m_y and self.m_z == other.m_z
         else:
             return False
     def __hash__(self):
-        return(hash("%s%6d%6d%6d" % (type(self).__name__,self.m_x,self.m_y,self.m_z)))  
+        return(hash("%6d%6d%6d" % (self.m_x,self.m_y,self.m_z)))  
         
     def __str__(self):
         return("Point x:%d,y:%d,z:%d" % (self.m_x, self.m_y, self.m_z))
@@ -233,7 +239,9 @@ class Point():
 
     def get_z(self):
         return self.m_z
-    z = property(get_z)
+    def set_z(self, a_z):
+        self.m_z = a_z
+    z = property(get_z, set_z)
 
 class Circle():
     """
@@ -244,7 +252,7 @@ class Circle():
         self.__radius = a_radius
     
     def is_point_in(self,a_point):
-       print ("DEBUG: mathematics.Circle.is_point_in - ", self.__center, a_point, self.__radius)
+       # print ("DEBUG: mathematics.Circle.is_point_in - ", self.__center, a_point, self.__radius)
        return ((self.__center.x - a_point.x)**2 + ((self.__center.y - a_point.y)**2)) <= self.__radius**2 
     
     def __str__(self):
