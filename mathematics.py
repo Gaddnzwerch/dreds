@@ -1,5 +1,4 @@
 import copy
-#import location
 
 class Vector():
     def __init__(self,a_point1,a_point2):
@@ -29,6 +28,13 @@ class Vector():
         self.__length = 0.0
         self.__dirZ = a_z
     z = property(get_z,set_z)
+
+    def get_points(self):
+        points = set()
+        points.add(self.origin)
+        points.add(self.target)
+        return points
+    points = property(get_points)
 
     def get_length(self):
         if self.__length != 0.0:
@@ -66,8 +72,7 @@ class Vector():
         value.y = y
         value.z = z
         return value
-        
-
+    
 class Flat():
     """
         a flat is limited by two vectors who have to share the same origin
@@ -100,7 +105,39 @@ class Flat():
     def get_origin(self):
         return self.__vector1.origin
     origin = property(get_origin)
-    
+
+    def get_vector_of(self,a_point):
+        """
+            if a_point lies on a border of the flat, return the corresponding border, else None
+        """
+        return_vector = None
+        v1 = copy.copy(self.__vector1)
+        v1.z = 0
+        v2 = copy.copy(self.__vector2)
+        v2.z = 0
+        v3 = Vector(self.__vector1.origin,a_point)
+        v3.z = 0
+        
+        # Compute dot products
+        dot00 = v1.dot_product(v1)
+        dot01 = v1.dot_product(v2)
+        dot02 = v1.dot_product(v3)
+        dot11 = v2.dot_product(v2)
+        dot12 = v2.dot_product(v3)
+
+        # Compute barycentric coordinates
+        invDenom = 1 / (dot00 * dot11 - dot01 * dot01)
+        u = (dot11 * dot02 - dot01 * dot12) * invDenom
+        v = (dot00 * dot12 - dot01 * dot02) * invDenom
+        if v == 0:
+            return_vector = self.vector1
+        elif u == 0:
+            return_vector = self.vector2
+        elif u + v == 1:
+            return_vector = self.vector3
+        return return_vector
+
+
     def is_point_in(self,a_point):
         """
             Returns true if the x,y value of a loctation lies in the baseplain of the flat (z=0)
@@ -124,6 +161,7 @@ class Flat():
         invDenom = 1 / (dot00 * dot11 - dot01 * dot01)
         u = (dot11 * dot02 - dot01 * dot12) * invDenom
         v = (dot00 * dot12 - dot01 * dot02) * invDenom
+        # print("DEBUG: mathematics.Flat.is_point_in(",a_point,") - u: " , u , " v: " , v)
 
         # Check if point is in triangle
         return (u >= 0) and (v >= 0) and (u + v < 1)

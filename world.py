@@ -24,7 +24,9 @@ class Sourroundings:
         self.terrain = terrain.Terrain()
     
     def populate(self):
+        self.terrain.add_point(location.Location(2,2,1))
         self.terrain.add_point(location.Location(89,51,2))
+        self.terrain.add_point(location.Location(1,32,5))
         self.terrain.add_point(self.locationFactory.create_random_location(1,self.MAXX-1,1,self.MAXY-1))
         biome = places.Biome() 
         foxlocation = self.locationFactory.create_random_location(1,self.MAXX,1,self.MAXY)
