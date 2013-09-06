@@ -8,11 +8,11 @@ class Terrain():
         self.__adjacent_flats = dict()
         maximum = 100
         height = 1
-        v1 = mathematics.Vector(location.Location(1,1,height),location.Location(1,maximum,height))
-        v2 = mathematics.Vector(location.Location(1,1,height),location.Location(maximum,1,height))
+        v1 = mathematics.Vector(location.Location(0,0,height),location.Location(0,maximum,height))
+        v2 = mathematics.Vector(location.Location(0,0,height),location.Location(maximum,0,height))
         self.__flats.add(mathematics.Flat(v1,v2))
-        v1 = mathematics.Vector(location.Location(maximum,maximum,height),location.Location(maximum,1,height))
-        v2 = mathematics.Vector(location.Location(maximum,maximum,height),location.Location(1,maximum,height))
+        v1 = mathematics.Vector(location.Location(maximum,maximum,height),location.Location(maximum,0,height))
+        v2 = mathematics.Vector(location.Location(maximum,maximum,height),location.Location(0,maximum,height))
         self.__flats.add(mathematics.Flat(v1,v2)) 
         self.__get_adjacent_flats()
         
@@ -38,7 +38,7 @@ class Terrain():
             if flat.is_point_in(a_new_point):
                 cutting_vector = flat.get_vector_of(a_new_point)
                 if not cutting_vector:
-                    print("DEBUG: terrain.Terrain.add_point() - ", a_new_point , " is in :" , flat)
+                    # print("DEBUG: terrain.Terrain.add_point() - ", a_new_point , " is in :" , flat)
                     # create new vectors (and flats)
                     new_vector1 = mathematics.Vector(flat.vector1.origin, a_new_point)
                     new_vector2 = mathematics.Vector(flat.vector2.origin, a_new_point)
@@ -48,7 +48,7 @@ class Terrain():
                     new_flats.add(mathematics.Flat(flat.vector2,new_vector2))
                     new_flats.add(mathematics.Flat(new_vector3,new_vector4))
                 else: 
-                    print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - lies on :" , cutting_vector)
+                    # print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - lies on :" , cutting_vector)
                     #TODO: test if a_new_point is on a side of the flat - in that case only two new flats are needed
                     unused_point = (flat.points - cutting_vector.points).pop()
                     new_vector1 = mathematics.Vector(a_new_point, cutting_vector.origin)
@@ -58,6 +58,7 @@ class Terrain():
                     new_flats.add(mathematics.Flat(new_vector2, new_vector3))
                     # find a flat that shares that point
                     for additional_flat in self.__adjacent_flats[flat]:
+                        # print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - testing :", additional_flat)
                         cutting_vector2 = additional_flat.get_vector_of(a_new_point)
                         if cutting_vector2:
                             unused_point = (additional_flat.points - cutting_vector2.points).pop()
@@ -66,15 +67,15 @@ class Terrain():
                             new_vector3 = mathematics.Vector(a_new_point, unused_point)
                             new_flats.add(mathematics.Flat(new_vector1, new_vector3))
                             new_flats.add(mathematics.Flat(new_vector2, new_vector3))
-                            print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - discarding " , additional_flat)
+                            # print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - discarding " , additional_flat)
                             self.__flats.discard(additional_flat)
                             break
 
-                print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - discarding " , flat)
+                # print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - discarding " , flat)
                 self.__flats.discard(flat)
-                print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - new flats:")
-                for x in new_flats:
-                    print("                                  ", x)
+                # print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - new flats:")
+                # for x in new_flats:
+                    # print("                                  ", x)
 
                 # check delaunay-condition
                 while len(new_flats) > 0:
@@ -87,8 +88,8 @@ class Terrain():
                                 if new_flat.get_circumscribed_circle().is_point_in(point):
                                     delaunay = False
                                     # flip if necessary
-                                    print("DEBUG: terrain.Terrain.add_point [Flipping flats " , new_flat) 
-                                    print("                                                 " , test_flat, "]")
+                                    # print("DEBUG: terrain.Terrain.add_point [Flipping flats " , new_flat) 
+                                    # print("                                                 " , test_flat, "]")
                                     # find points that exist only in one of the flats
                                     single_points = new_flat.points ^ test_flat.points
                                     double_points = new_flat.points & test_flat.points
@@ -100,7 +101,7 @@ class Terrain():
                                         created_flat = mathematics.Flat(main_vector, second_vector)
                                         # add new flats
                                         new_flats.add(created_flat)
-                                        print("DEBUG: terrain.Terrain.add_point [new Flat " , created_flat , "]")
+                                        # print("DEBUG: terrain.Terrain.add_point [new Flat " , created_flat , "]")
                                     # remove old flats from list
                                     new_flats.discard(new_flat)
                                     new_flats.discard(test_flat)
@@ -111,6 +112,6 @@ class Terrain():
                         self.__get_adjacent_flats()
                 break
         # print("DEBUG: terrain.Terrain.add_point [alle neuen Flächen erfüllen die Umkreisbedingung]")                            
-        print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - after insert:")
-        for flat in self.__flats:
-            print("                                 ", flat)
+        # print("DEBUG: terrain.Terrain.add_point(", a_new_point, ") - after insert:")
+        # for flat in self.__flats:
+            # print("                                 ", flat)

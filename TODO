@@ -6,7 +6,7 @@
         + get new adjacent flats
 - General Math
     + circumscribed circle
-        - special case 100,75 > triangle is a line
+        + special case 100,75 > triangle is a line
             + test if a point is directly on one side of a triangle
     + point in circle
     - test if a vector intersects a triangle

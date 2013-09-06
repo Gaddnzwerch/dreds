@@ -164,7 +164,7 @@ class Flat():
         # print("DEBUG: mathematics.Flat.is_point_in(",a_point,") - u: " , u , " v: " , v)
 
         # Check if point is in triangle
-        return (u >= 0) and (v >= 0) and (u + v < 1)
+        return (u >= 0) and (v >= 0) and (u + v <= 1)
     
     def get_z(self, a_point):
         direction = Vector(Point(0,0,0),Point(0,0,1))
@@ -197,7 +197,7 @@ class Flat():
             c_1 = self.vector2.target.y
             D = (a_0 - c_0) * (b_1 - c_1) - (b_0 - c_0) * (a_1 - c_1)
             if D == 0:
-                print("DEBUG: mathematics.Flat.get_circumscribed_circle [D = 0] - ",  a_0, a_1, b_0, b_1, c_0, c_1)
+                print("DEBUG: mathematics.Flat.get_circumscribed_circle [D = 0] - for ", self, ":" ,  a_0, a_1, b_0, b_1, c_0, c_1)
 
             p_0 = (((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_1 - c_1) -  ((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_1 - c_1)) / D
             p_1 = (((b_0 - c_0) * (b_0 + c_0) + (b_1 - c_1) * (b_1 + c_1)) / 2 * (a_0 - c_0) -  ((a_0 - c_0) * (a_0 + c_0) + (a_1 - c_1) * (a_1 + c_1)) / 2 * (b_0 - c_0)) / D
