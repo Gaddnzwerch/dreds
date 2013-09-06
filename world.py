@@ -57,7 +57,8 @@ class Sourroundings:
     
     def vermin(self):
         mouse = vermin.Mouse()
-        mouse.location = self.locationFactory.create_random_location(1,self.MAXX,1,self.MAXY)
+        mouse.location = self.locationFactory.create_random_location(self.terrain.min_x,self.terrain.max_x,self.terrain.min_y,self.terrain.max_y)
+        mouse.location.z = self.terrain.get_elevation(mouse.location)
         self.fauna.add(mouse)
         self.add_entity(mouse)
             
