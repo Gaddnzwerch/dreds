@@ -24,16 +24,20 @@ class Sourroundings:
         self.terrain = terrain.Terrain()
     
     def populate(self):
-        self.terrain.add_point(location.Location(50,50,1))
-        self.terrain.add_point(location.Location(89,51,2))
-        self.terrain.add_point(location.Location(0,32,5))
-        self.terrain.add_point(self.locationFactory.create_random_location(1,self.MAXX-1,1,self.MAXY-1))
+        self.terrain.add_point(location.Location(50,50,10))
+        self.terrain.add_point(location.Location(89,51,20))
+        self.terrain.add_point(location.Location(0,32,50))
+        self.terrain.add_point(self.locationFactory.create_random_location(0,self.MAXX,0,self.MAXY))
         biome = places.Biome() 
-        foxlocation = self.locationFactory.create_random_location(1,self.MAXX,1,self.MAXY)
+        foxlocation = self.locationFactory.create_random_location(self.terrain.min_x, self.terrain.max_x, self.terrain.min_y,self.terrain.max_y) 
+        foxlocation.z = self.terrain.get_elevation(foxlocation) 
+
         self.population.add(fox.FoxFactory.create_fox(True,foxlocation))
         foxlocation = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
+        foxlocation.z = self.terrain.get_elevation(foxlocation) 
         self.places.add(places.Den("Fox-Den",foxlocation))
         foxlocation = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
+        foxlocation.z = self.terrain.get_elevation(foxlocation) 
         self.population.add(fox.FoxFactory.create_fox(False,foxlocation))
         #self.flora.add(plants.Tree())
         #self.flora.add(plants.BroadLeafTree())
@@ -44,6 +48,7 @@ class Sourroundings:
         while noVermin < maxVermin:
             mouse = vermin.Mouse()
             mouse.location = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
+            mouse.location.z = self.terrain.get_elevation(mouse.location) 
             self.fauna.add(mouse)
             noVermin += 1
 
@@ -73,7 +78,7 @@ def main():
     remove = set()
     m_time = gametime.Gametime    
 
-    while True and m_time.tickcount < 1:        
+    while True and m_time.tickcount < 100:        
         print("Round ", m_time.tickcount)        
         for entity in sourroundings.population:
             oldQuadrant = entity.location.get_quadrant()
@@ -99,35 +104,35 @@ def main():
         sourroundings.vermin()
         m_time.nextTick()
 
-    """
-        Tests
-    """
-    v1 = mathematics.Vector(location.Location(0,0,0),location.Location(1,2,3))
-    v2 = mathematics.Vector(location.Location(0,0,0),location.Location(-7,8,9))
-    v3 = mathematics.Vector(location.Location(1,0,0),location.Location(0,1,0))
-    v4 = mathematics.Vector(location.Location(0,0,0),location.Location(1,1,0))
-    v5 = mathematics.Vector(location.Location(0,0,0),location.Location(0,1,0))
-    v6 = mathematics.Vector(location.Location(0,0,1),location.Location(100,0,10))
-    v7 = mathematics.Vector(location.Location(0,0,1),location.Location(0,100,10))
-    print(v1.dot_product(v2))
-    print(v1.cross_product(v2))
-    flat1 = mathematics.Flat(v1,v2)
-    print(flat1.normal)
-    try:
-        flat2 = mathematics.Flat(v1,v3)
-    except Exception:
-        pass
-    flat3 = mathematics.Flat(v4,v5)
-    print(flat3.is_point_in(location.Location(0.5,0.5,0)))
-    print(flat3.is_point_in(location.Location(1,1,100)))
-    flat4 = mathematics.Flat(v6,v7)
-    print(flat4)
-    circle0 = flat4.get_circumscribed_circle()
-    print(flat4.get_area())
-    print(flat4.normal)
-    print(flat4.get_z(location.Location(1,1,0)))
-    circle1 = flat1.get_circumscribed_circle()
-    print(circle0, circle1)
+#    """
+#        Tests
+#    """
+#    v1 = mathematics.Vector(location.Location(0,0,0),location.Location(1,2,3))
+#    v2 = mathematics.Vector(location.Location(0,0,0),location.Location(-7,8,9))
+#    v3 = mathematics.Vector(location.Location(1,0,0),location.Location(0,1,0))
+#    v4 = mathematics.Vector(location.Location(0,0,0),location.Location(1,1,0))
+#    v5 = mathematics.Vector(location.Location(0,0,0),location.Location(0,1,0))
+#    v6 = mathematics.Vector(location.Location(0,0,1),location.Location(100,0,10))
+#    v7 = mathematics.Vector(location.Location(0,0,1),location.Location(0,100,10))
+#    print(v1.dot_product(v2))
+#    print(v1.cross_product(v2))
+#    flat1 = mathematics.Flat(v1,v2)
+#    print(flat1.normal)
+#    try:
+#        flat2 = mathematics.Flat(v1,v3)
+#    except Exception:
+#        pass
+#    flat3 = mathematics.Flat(v4,v5)
+#    print(flat3.is_point_in(location.Location(0.5,0.5,0)))
+#    print(flat3.is_point_in(location.Location(1,1,100)))
+#    flat4 = mathematics.Flat(v6,v7)
+#    print(flat4)
+#    circle0 = flat4.get_circumscribed_circle()
+#    print(flat4.get_area())
+#    print(flat4.normal)
+#    print(flat4.get_z(location.Location(1,1,0)))
+#    circle1 = flat1.get_circumscribed_circle()
+#    print(circle0, circle1)
 
 if __name__=='__main__':
     main() 

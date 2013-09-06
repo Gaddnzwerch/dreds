@@ -2,8 +2,10 @@
 - TestCases
 - Generate Terrain
     - generate a map of height distribution (x, y associated to a z-value)
-    - convert a map of heights to flats (Delaunay Triangulation)
+    + convert a map of heights to flats (Delaunay Triangulation)
         + get new adjacent flats
+    - ocean level
+    - surface condition
 - General Math
     + circumscribed circle
         + special case 100,75 > triangle is a line
@@ -11,3 +13,4 @@
     + point in circle
     - test if a vector intersects a triangle
 - Pathfinding    
+    - costs for different path (upwards / downwards)

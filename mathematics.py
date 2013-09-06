@@ -244,8 +244,8 @@ class Point():
     """
         Basic type to store a location. A technical class for calulation purposes.
     """
-    standardZ = 1
-    def __init__(self,a_x=0, a_y=0, a_z=standardZ):
+    standardZ = 1.0
+    def __init__(self,a_x=0.0, a_y=0.0, a_z=standardZ):
         self.m_x = a_x
         self.m_y = a_y
         self.m_z = a_z
@@ -258,7 +258,7 @@ class Point():
         return(hash("%6d%6d%6d" % (self.m_x,self.m_y,self.m_z)))  
         
     def __str__(self):
-        return("Point x:%d,y:%d,z:%d" % (self.m_x, self.m_y, self.m_z))
+        return("Point x:%.2f,y:%.2f,z:%.2f" % (self.m_x, self.m_y, self.m_z))
     def get_array(self):
         return [self.m_x,self.m_y,self.m_z]
 
