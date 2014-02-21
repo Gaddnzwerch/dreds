@@ -40,6 +40,21 @@ class Move(Command):
         self.entity.move(self.__to)
        self.finished = self.entity.location == self.__to 
 
+class Catch(Command):
+    def __init__(self,a_entity,a_victim):
+        super(Catch,self).__init__(a_entity)
+        self.__victim = a_victim
+    def execute(self):
+        if self.__victim.active:
+            print("DEBUG: plan.Catch.execute() - The ", type(self.entity).__name__, " tries to catch the ", type(self.__victim).__name__)
+            catched = self.entity.catch(self.__victim)
+            print("DEBUG: plan.Catch.execute() - ", catched)
+            self.finished = catched
+        else:
+            self.__victim = None
+            self.finished = True
+        
+
 class Feed(Command):
     def __init__(self,a_entity,a_nutrition):
         Command.__init__(self,a_entity)

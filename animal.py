@@ -14,7 +14,7 @@ class Animal(entity.Entity):
         """phyisical attributes"""
         self.__speed = 3 #should be used by implementing class
         self.__strength = 0
-        self.__agility = 0
+        self.__agility = 5
         """basic physical states"""
         self.__age = 0
         self.__hunger = 0
@@ -31,6 +31,10 @@ class Animal(entity.Entity):
     def get_speed(self):
         return self.__speed
     speed = property(get_speed)
+
+    def get_agility(self):
+        return self.__agility
+    agility = property(get_agility)
     
     def get_age(self):
         return self.__age
@@ -51,6 +55,9 @@ class Animal(entity.Entity):
         self.__exhaust = a_exhaust
 
     exhaust = property(get_exhaust,set_exhaust)
+
+    def catch(self,a_victim):
+        return self.__agility >= a_victim.evade(self)
 
     def get_dirty(self):
         return self.__dirty

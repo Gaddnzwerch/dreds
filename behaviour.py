@@ -82,6 +82,7 @@ class BehaviourHunt(Behaviour):
                 # move to it 
                 self.__parent.animal.plans.append(plan.Move(self.__parent.animal,prey.location))
                 # catch it
+                self.__parent.animal.plans.append(plan.Catch(self.__parent.animal,prey))
                 # TODO
                 # consume it
                 self.__parent.animal.plans.append(plan.Feed(self.__parent.animal,prey))

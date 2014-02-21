@@ -6,6 +6,14 @@
         + get new adjacent flats
     - ocean level
     - surface condition
+    - waterflow
+- Water
+- Perception
+    - seeing
+        - direction, distance
+        - get all objects in an given area (e.g. an triangle)
+    - hearing
+    - smelling
 - General Math
     + circumscribed circle
         + special case 100,75 > triangle is a line
@@ -13,4 +21,4 @@
     + point in circle
     - test if a vector intersects a triangle
 - Pathfinding    
-    - costs for different path (upwards / downwards)
+    - costs for different path (upwards / downwards / terrain condition)

@@ -72,7 +72,7 @@ class Terrain():
                     new_flats.add(mathematics.Flat(new_vector3,new_vector4))
                 else: 
                     # print("DEBUG: terrain.Terrain.add_point(", a_new_point,") - lies on :" , cutting_vector)
-                    #TODO: test if a_new_point is on a side of the flat - in that case only two new flats are needed
+                    #test if a_new_point is on a side of the flat - in that case only two new flats are needed
                     unused_point = (flat.points - cutting_vector.points).pop()
                     new_vector1 = mathematics.Vector(a_new_point, cutting_vector.origin)
                     new_vector2 = mathematics.Vector(a_new_point, cutting_vector.target)

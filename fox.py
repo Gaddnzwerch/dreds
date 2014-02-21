@@ -12,10 +12,11 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
     minForHunger = 20         #hunger before it feels hungry
 
     def __init__(self):
-        animal.Mammal.__init__(self)
+        super(Foxes,self).__init__()
         """basic physical attributes"""
         #has to be calculated from physical aspets - not on every tick, so
         self.__speed=5    
+        self.__agility = 50
         """basic physical states"""
         self.maxExhaust = Fox.maxExhaust
         self.exhaustToTired = self.maxExhaust * Fox.exhaustTired
@@ -42,7 +43,10 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
        if self.hunger < 0:
         self.hunger = 0
        if self.isHungry != (self.hunger >= Fox.minForHunger):
-           print("The ", type(self).__name__, " is getting hungry") 
+            if self.hunger >= Fox.minForHunger:          
+               print("The ", type(self).__name__, " is getting hungry") 
+            else:
+               print("The ", type(self).__name__, " isn't hungry anymore")
        self.isHungry = (self.hunger >= Fox.minForHunger)
 
     """actions"""
@@ -54,12 +58,11 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
 
 class Fox(Foxes,gender.Male):
     def __init__(self):
-        Foxes.__init__(self)
+        super(Fox,self).__init__()
 
 class Vixen(Foxes,gender.Female):
     def __init__(self):
-        Foxes.__init__(self)
-
+        super(Vixen,self).__init__()
 class FoxFactory:
     def __init__(self):
         pass
