@@ -18,8 +18,8 @@ class Sourroundings:
         self.flora = set()
         self.places = set()
         self.locationFactory = location.LocationFactory()        
-        self.MAXX = 100
-        self.MAXY = 100
+        self.MAXX = 50
+        self.MAXY = 50
         #TEST 
         self.terrain = terrain.Terrain()
     
@@ -77,7 +77,6 @@ def main():
     m_time = gametime.Gametime    
 
     while True and m_time.tickcount < 100:        
-        print("Round ", m_time.tickcount)        
         for entity in sourroundings.population:
             oldQuadrant = entity.location.get_quadrant()
             entity.percieve(sourroundings)

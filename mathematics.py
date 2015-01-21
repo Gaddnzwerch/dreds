@@ -214,7 +214,7 @@ class Flat():
     def GetIntersectionEG(Ep, Er1, Er2, Gp, Gr):
         """
         Idea from http://c4dnetwork.com/board/threads/78864-Schnittpunkt-Ebene-Gerade
-        Ep = Ortsvector der Ebene
+        Ep = Ortsvektor der Ebene
         Er1 = Richtungsvetor 1 von Ep aus
         Er2 = Richtungsvetor 2 von Ep aus
         Gp = Ortsvektor auf der Geraden

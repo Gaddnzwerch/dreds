@@ -46,9 +46,7 @@ class Catch(Command):
         self.__victim = a_victim
     def execute(self):
         if self.__victim.active:
-            print("DEBUG: plan.Catch.execute() - The ", type(self.entity).__name__, " tries to catch the ", type(self.__victim).__name__)
             catched = self.entity.catch(self.__victim)
-            print("DEBUG: plan.Catch.execute() - ", catched)
             self.finished = catched
         else:
             self.__victim = None

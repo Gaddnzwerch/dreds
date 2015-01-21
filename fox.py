@@ -44,9 +44,9 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
         self.hunger = 0
        if self.isHungry != (self.hunger >= Fox.minForHunger):
             if self.hunger >= Fox.minForHunger:          
-               print("The ", type(self).__name__, " is getting hungry") 
+                self.add_message("The " + type(self).__name__ + " is getting hungry")
             else:
-               print("The ", type(self).__name__, " isn't hungry anymore")
+                self.add_message("The " + type(self).__name__ + " isn't hungry anymore")
        self.isHungry = (self.hunger >= Fox.minForHunger)
 
     """actions"""

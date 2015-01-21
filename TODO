@@ -1,5 +1,5 @@
 - Logging
-- TestCases
+- TestCases - switch to test driven developement
 - Generate Terrain
     - generate a map of height distribution (x, y associated to a z-value)
     + convert a map of heights to flats (Delaunay Triangulation)
@@ -22,3 +22,4 @@
     - test if a vector intersects a triangle
 - Pathfinding    
     - costs for different path (upwards / downwards / terrain condition)
+- some sort of graphical representation (what could it look like?)

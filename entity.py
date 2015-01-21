@@ -4,6 +4,7 @@ class Entity:
         self.__location = location.Location()
         self.__active = True
         self.__age = 0
+        self.__message = ''
     def get_location(self):
         return self.__location
     def set_location(self,a_location):
@@ -21,6 +22,14 @@ class Entity:
     def set_age(self,a_age):
         self.__age = a_age
     age = property(get_age,set_age) 
+
+    def get_message(self):
+        mMessage = self.__message
+        self.__message = ''
+        return mMessage
+    def add_message(self, aAdditionalMessage):
+        # print(aAdditionalMessage)
+        self.__message += aAdditionalMessage
 
     def ageing(self):
         self.age += 1

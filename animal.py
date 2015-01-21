@@ -57,6 +57,7 @@ class Animal(entity.Entity):
     exhaust = property(get_exhaust,set_exhaust)
 
     def catch(self,a_victim):
+        self.add_message("DEBUG: plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)
         return self.__agility >= a_victim.evade(self)
 
     def get_dirty(self):
@@ -106,7 +107,7 @@ class Animal(entity.Entity):
             self.collapse()
 
     def move(self):
-        print('The ', type(self).__name__, ' moves')
+        self.add_message('The ' + type(self).__name__ + ' moves')
         self.add_hunger(5)
         self.add_exhaust(10)
         self.boredness -= 5
@@ -119,15 +120,15 @@ class Animal(entity.Entity):
         if self.__speed > 0:
             if m_vector.length >= self.__speed:
                 m_vector.length = self.__speed
-            print('The ', type(self).__name__, ' moves to ', a_location, ' with a speed of ', m_vector.length, '.')
+            self.add_message('The ' + type(self).__name__ + ' moves to ' + repr(a_location) + ' with a speed of ' + repr(m_vector.length) + '.')
             self.location.add(m_vector)
-            print('The ', type(self).__name__, ' is now at ', self.location, '.')
+            self.add_message('The ' + type(self).__name__ + ' is now at ' + repr(self.location) + '.')
         else:
-            print('The ', type(self).__name__, ' is immobile!') 
+            self.add_message('The ' + type(self).__name__ + ' is immobile!')
 
 
     def rest(self):
-        print('The ', type(self).__name__ , ' rests')
+        self.add_message('The '+ type(self).__name__ + ' rests')
         self.add_exhaust(-20)
         self.add_hunger(2)
 
@@ -143,7 +144,7 @@ class Animal(entity.Entity):
         return self.isHungry
 
     def collapse(self):
-        print("The " , type(self).__name__ , " collapses")
+        self.add_message("The " + type(self).__name__ + " collapses")
         self.disquiet += 100
         self.anger += 10
         self.dirty += 10
@@ -162,7 +163,7 @@ class Animal(entity.Entity):
         self.boredness -= 1
         self.satisfaction += 50
         a_nutrition.get_consumed()
-        print("The " , type(self).__name__, " feeds the " , type(a_nutrition).__name__ , ". Remaining hunger: " , self.hunger, " " , self.is_hungry())
+        self.add_message("The " + type(self).__name__+ " feeds the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
 
     def percieve(self,a_sourrounding):
         #TODO just see everything in the same quadrant
@@ -199,7 +200,7 @@ class Animal(entity.Entity):
                 self.places.add(a_other)
                 if issubclass(self.__class__,DenInhabitant):
                     #TODO test if the den is occupied
-                    print("The ", type(self).__name__, " made the ", type(a_other).__name__, " its den!")
+                    self.add_message("The "+ type(self).__name__+ " made the "+ type(a_other).__name__+ " its den!")
                     self.den = a_other
             self.known.add(a_other)
 
@@ -236,7 +237,7 @@ class DenInhabitant():
         self.__den = a_den
     den =  property(get_den,set_den)
 """
-    Belong more in Behaviour?
+    Does belong more in Behaviour?
 """
 class Carnivore:
     pass
