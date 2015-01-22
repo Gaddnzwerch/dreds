@@ -77,6 +77,7 @@ class BehaviourHunt(Behaviour):
                 #TODO find the best prey
                 prey = random.sample(self.__parent.animal.food_sources,1)[0] 
             except ValueError:
+                self.__parent.animal.add_message("The " + type(self.__parent.animal).__name__ + " is hungry but can't find anything to feed.")
                 pass #TODO no food known yet
             if prey:
                 # move to it 

@@ -152,18 +152,19 @@ class Animal(entity.Entity):
         raise Errors.CollapseError()
 
     def idle(self):
+        self.add_message("The " + type(self).__name__ + " idles.")
         self.add_hunger(1)
         self.boredness += 1
         self.add_exhaust(-5)
 
     def feed(self,a_nutrition):
-        self.add_hunger(-a_nutrition.nutrition_value)
+        self.add_message("The " + type(self).__name__+ " feeds the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
         self.add_exhaust(1)
         self.dirty += 10
         self.boredness -= 1
         self.satisfaction += 50
+        self.add_hunger(-a_nutrition.nutrition_value)
         a_nutrition.get_consumed()
-        self.add_message("The " + type(self).__name__+ " feeds the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
 
     def percieve(self,a_sourrounding):
         #TODO just see everything in the same quadrant

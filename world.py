@@ -36,9 +36,9 @@ class Sourroundings:
         foxlocation = self.locationFactory.create_location_in_quadrant(foxlocation.get_quadrant())
         foxlocation.z = self.terrain.get_elevation(foxlocation) 
         self.population.add(fox.FoxFactory.create_fox(False,foxlocation))
-        #self.flora.add(plants.Tree())
-        #self.flora.add(plants.BroadLeafTree())
-        #self.flora.add(plants.Conifer())
+        self.flora.add(plants.Tree())
+        self.flora.add(plants.BroadLeafTree())
+        self.flora.add(plants.Conifer())
 
         maxVermin = 5
         noVermin = 0
@@ -77,7 +77,11 @@ def main():
     m_time = gametime.Gametime    
 
     while True and m_time.tickcount < 100:        
+        print(m_time.tickcount)
         for entity in sourroundings.population:
+            m_message = entity.get_message()
+            if m_message != "":
+                print(m_message) 
             oldQuadrant = entity.location.get_quadrant()
             entity.percieve(sourroundings)
             entity.life()
@@ -88,6 +92,9 @@ def main():
 
 
         for entity in sourroundings.fauna:
+            m_message = entity.get_message()
+            if m_message != "":
+                print(m_message) 
             entity.ageing()
             if not entity.active:
                 remove.add(entity)

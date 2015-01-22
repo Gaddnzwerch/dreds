@@ -13,6 +13,9 @@ class Location(mathematics.Point):
 
     def get_distance(self,a_location): 
         return Line(self.get_array(),a_location.get_array()).distance()
+
+    def __repr__(self):
+        return repr(int(self.x)) + "," + repr(int(self.y)) + "," + repr(int(self.z))
     
 class Quadrant(Location):
     """

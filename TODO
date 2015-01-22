@@ -9,11 +9,12 @@
     - waterflow
 - Water
 - Perception
-    - seeing
-        - direction, distance
-        - get all objects in an given area (e.g. an triangle)
-    - hearing
-    - smelling
+        - seeing
+            - direction, distance
+            - get all objects in an given area (e.g. an triangle)
+        - hearing
+        - smelling
+    - every entity provides notifications which all other entities can perceive
 - General Math
     + circumscribed circle
         + special case 100,75 > triangle is a line
@@ -23,3 +24,4 @@
 - Pathfinding    
     - costs for different path (upwards / downwards / terrain condition)
 - some sort of graphical representation (what could it look like?)
+- definition outside of the code, creating classes on startup or even during runtime (evolution)

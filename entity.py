@@ -5,6 +5,7 @@ class Entity:
         self.__active = True
         self.__age = 0
         self.__message = ''
+        self.__notifiation = [] #contains informations about incidents 
     def get_location(self):
         return self.__location
     def set_location(self,a_location):
@@ -24,12 +25,18 @@ class Entity:
     age = property(get_age,set_age) 
 
     def get_message(self):
-        mMessage = self.__message
+        m_message = self.__message
         self.__message = ''
-        return mMessage
-    def add_message(self, aAdditionalMessage):
-        # print(aAdditionalMessage)
-        self.__message += aAdditionalMessage
+        return m_message
+    def add_message(self, a_additionalMessage):
+        self.__message += a_additionalMessage
+        
+    def get_notification(self):
+        m_notification = self.__notification
+        self.__notification = []
+        return m_notification
+    def add_notification(self, a_notification):
+        self.__notification.append(a_notification)
 
     def ageing(self):
         self.age += 1
