@@ -1,4 +1,4 @@
-- Logging
++ Logging
 - TestCases - switch to test driven developement
 - Generate Terrain
     - generate a map of height distribution (x, y associated to a z-value)

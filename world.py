@@ -119,48 +119,7 @@ def main():
             for m_inhabitant in m_quadrant.get_inhabitants():
                 m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
         m_display.display(m_stringlist)        
-        time.sleep(0.1)
-        """
-        for i in range(0, sourroundings.MAXY):
-            if m_time.tickcount == i:
-                m_string.append('{:*^50}'.format('F'))
-            else:
-                m_string.append('')
-
-        m_display.display(m_string)
-        """
     logging.info('End')
     
-
-#    """
-#        Tests
-#    """
-#    v1 = mathematics.Vector(location.Location(0,0,0),location.Location(1,2,3))
-#    v2 = mathematics.Vector(location.Location(0,0,0),location.Location(-7,8,9))
-#    v3 = mathematics.Vector(location.Location(1,0,0),location.Location(0,1,0))
-#    v4 = mathematics.Vector(location.Location(0,0,0),location.Location(1,1,0))
-#    v5 = mathematics.Vector(location.Location(0,0,0),location.Location(0,1,0))
-#    v6 = mathematics.Vector(location.Location(0,0,1),location.Location(100,0,10))
-#    v7 = mathematics.Vector(location.Location(0,0,1),location.Location(0,100,10))
-#    print(v1.dot_product(v2))
-#    print(v1.cross_product(v2))
-#    flat1 = mathematics.Flat(v1,v2)
-#    print(flat1.normal)
-#    try:
-#        flat2 = mathematics.Flat(v1,v3)
-#    except Exception:
-#        pass
-#    flat3 = mathematics.Flat(v4,v5)
-#    print(flat3.is_point_in(location.Location(0.5,0.5,0)))
-#    print(flat3.is_point_in(location.Location(1,1,100)))
-#    flat4 = mathematics.Flat(v6,v7)
-#    print(flat4)
-#    circle0 = flat4.get_circumscribed_circle()
-#    print(flat4.get_area())
-#    print(flat4.normal)
-#    print(flat4.get_z(location.Location(1,1,0)))
-#    circle1 = flat1.get_circumscribed_circle()
-#    print(circle0, circle1)
-
 if __name__=='__main__':
     main() 
