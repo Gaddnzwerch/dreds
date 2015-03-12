@@ -1,6 +1,7 @@
 import entity
 import nutrition
 import random
+import logging
 
 class Vermin(entity.Entity, nutrition.Nutrition):
     """
@@ -25,13 +26,15 @@ class Vermin(entity.Entity, nutrition.Nutrition):
 class Mouse(Vermin):
     
     def __init__(self):
-       super(Mouse, self).__init__(100, 75) 
+        logging.debug('Created a mouse')
+        super(Mouse, self).__init__(100, 75) 
 
     def ageing(self):
         super(Mouse, self).ageing()
         try:
             randomint = random.randrange(100-self.age) 
             if randomint == 1:
+                logging.debug('The mouse dissapeared')
                 self.active = False
         except ValueError:
             self.active = False

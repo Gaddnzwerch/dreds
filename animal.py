@@ -1,3 +1,4 @@
+import logging
 import location
 import plan
 import entity
@@ -25,7 +26,7 @@ class Animal(entity.Entity):
         self.__sameSpecies = set()
         self.__plans = plan.Plan()
         self.__places = set()
-        self.__known = set()
+        self.known = set()
         self.__inside = None
         self.__foodSources = set()
     def get_speed(self):
@@ -57,7 +58,7 @@ class Animal(entity.Entity):
     exhaust = property(get_exhaust,set_exhaust)
 
     def catch(self,a_victim):
-        self.add_message("DEBUG: plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)
+        logging.debug("plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)
         return self.__agility >= a_victim.evade(self)
 
     def get_dirty(self):
@@ -85,10 +86,6 @@ class Animal(entity.Entity):
         return self.__plans
     plans = property(get_plans)
 
-    def get_known(self):
-        return self.__known
-    known = property(get_known)
-
     def get_places(self):
         return self.__places
     places = property(get_places)
@@ -107,7 +104,7 @@ class Animal(entity.Entity):
             self.collapse()
 
     def move(self):
-        self.add_message('The ' + type(self).__name__ + ' moves')
+        logging.info('The ' + type(self).__name__ + ' moves')
         self.add_hunger(5)
         self.add_exhaust(10)
         self.boredness -= 5
@@ -120,15 +117,15 @@ class Animal(entity.Entity):
         if self.__speed > 0:
             if m_vector.length >= self.__speed:
                 m_vector.length = self.__speed
-            self.add_message('The ' + type(self).__name__ + ' moves to ' + repr(a_location) + ' with a speed of ' + repr(m_vector.length) + '.')
+            logging.info('The ' + type(self).__name__ + ' moves to ' + repr(a_location) + ' with a speed of ' + repr(m_vector.length) + '.')
             self.location.add(m_vector)
-            self.add_message('The ' + type(self).__name__ + ' is now at ' + repr(self.location) + '.')
+            logging.info('The ' + type(self).__name__ + ' is now at ' + repr(self.location) + '.')
         else:
-            self.add_message('The ' + type(self).__name__ + ' is immobile!')
+            logging.info('The ' + type(self).__name__ + ' is immobile!')
 
 
     def rest(self):
-        self.add_message('The '+ type(self).__name__ + ' rests')
+        logging.info('The '+ type(self).__name__ + ' rests')
         self.add_exhaust(-20)
         self.add_hunger(2)
 
@@ -144,7 +141,7 @@ class Animal(entity.Entity):
         return self.isHungry
 
     def collapse(self):
-        self.add_message("The " + type(self).__name__ + " collapses")
+        logging.info("The " + type(self).__name__ + " collapses")
         self.disquiet += 100
         self.anger += 10
         self.dirty += 10
@@ -152,13 +149,13 @@ class Animal(entity.Entity):
         raise Errors.CollapseError()
 
     def idle(self):
-        self.add_message("The " + type(self).__name__ + " idles.")
+        logging.info("The " + type(self).__name__ + " idles.")
         self.add_hunger(1)
         self.boredness += 1
         self.add_exhaust(-5)
 
     def feed(self,a_nutrition):
-        self.add_message("The " + type(self).__name__+ " feeds the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
+        logging.info("The " + type(self).__name__+ " feeds on the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
         self.add_exhaust(1)
         self.dirty += 10
         self.boredness -= 1
@@ -201,7 +198,7 @@ class Animal(entity.Entity):
                 self.places.add(a_other)
                 if issubclass(self.__class__,DenInhabitant):
                     #TODO test if the den is occupied
-                    self.add_message("The "+ type(self).__name__+ " made the "+ type(a_other).__name__+ " its den!")
+                    logging.info("The "+ type(self).__name__+ " made the "+ type(a_other).__name__+ " its den!")
                     self.den = a_other
             self.known.add(a_other)
 
@@ -216,13 +213,8 @@ class Animal(entity.Entity):
 class Mammal(Animal):
     def __init__(self):
         Animal.__init__(self)
-        self.__known = set()
+        self.known = set()
     
-    def get_known(self):
-        return self.__known
-
-    known = property(get_known)
-
     def percieve(self,a_sourrounding):
         Animal.percieve(self,a_sourrounding)
 
@@ -245,3 +237,7 @@ class Carnivore:
 class Cannibal(Carnivore):
     pass
 
+class FieldOfView(mathematics.Flat):
+    def __init__(self, a_distance, a_angle):
+        self.distance = a_distance
+        self.angle = a_angle

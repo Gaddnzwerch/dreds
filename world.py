@@ -1,4 +1,5 @@
 #! /usr/bin/env python3.2
+import logging
 import location
 import fox
 import plants
@@ -8,6 +9,8 @@ import vermin
 #Import for tests
 import mathematics
 import terrain
+from display import Display
+import time
 
 class Sourroundings:
 
@@ -20,7 +23,6 @@ class Sourroundings:
         self.locationFactory = location.LocationFactory()        
         self.MAXX = 50
         self.MAXY = 50
-        #TEST 
         self.terrain = terrain.Terrain()
     
     def populate(self):
@@ -65,23 +67,24 @@ class Sourroundings:
             quadrant = self.quadrants[quadrant]
         except KeyError:
             self.quadrants[quadrant] = quadrant
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            raise 
         finally:
             quadrant.get_inhabitants().add(a_entity)
     
-        
 
 def main():
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', filename='dreds.log', level=logging.DEBUG)
+    logging.info('Start')
     sourroundings = Sourroundings()
     sourroundings.populate()
     remove = set()
     m_time = gametime.Gametime    
+    m_display = Display()
 
-    while True and m_time.tickcount < 100:        
-        print(m_time.tickcount)
+    while True and m_time.tickcount < 50:        
         for entity in sourroundings.population:
-            m_message = entity.get_message()
-            if m_message != "":
-                print(m_message) 
             oldQuadrant = entity.location.get_quadrant()
             entity.percieve(sourroundings)
             entity.life()
@@ -92,9 +95,6 @@ def main():
 
 
         for entity in sourroundings.fauna:
-            m_message = entity.get_message()
-            if m_message != "":
-                print(m_message) 
             entity.ageing()
             if not entity.active:
                 remove.add(entity)
@@ -107,6 +107,30 @@ def main():
         remove.clear()            
         sourroundings.vermin()
         m_time.nextTick()
+
+        m_stringlist = []
+        m_string = []
+        for i in range(0,51):
+            m_string.append(' ')
+        for i in range(0,51):
+            m_stringlist.append(m_string.copy())
+
+        for m_quadrant in sourroundings.quadrants:
+            for m_inhabitant in m_quadrant.get_inhabitants():
+                m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
+        m_display.display(m_stringlist)        
+        time.sleep(0.1)
+        """
+        for i in range(0, sourroundings.MAXY):
+            if m_time.tickcount == i:
+                m_string.append('{:*^50}'.format('F'))
+            else:
+                m_string.append('')
+
+        m_display.display(m_string)
+        """
+    logging.info('End')
+    
 
 #    """
 #        Tests

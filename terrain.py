@@ -7,9 +7,9 @@ class Terrain():
         self.__flats = set()
         self.__adjacent_flats = dict()
         self.__min_x = 0
-        self.__max_x = 100
+        self.__max_x = 50
         self.__min_y = 0
-        self.__max_y = 100
+        self.__max_y = 50
         height = 1
         v1 = mathematics.Vector(location.Location(self.__min_x,self.__min_y,height),location.Location(self.__min_x,self.__max_y,height))
         v2 = mathematics.Vector(location.Location(self.__min_x,self.__min_y,height),location.Location(self.__max_x,self.__min_y,height))
@@ -43,7 +43,7 @@ class Terrain():
     
     def __get_adjacent_flats_for_flat(self, a_flat):
         near = set()
-        for other_flat in self.__flats:
+        for other_flat in self.__flats:            
             if a_flat != other_flat and a_flat.is_adjacent(other_flat):
                 near.add(other_flat)
         return near
