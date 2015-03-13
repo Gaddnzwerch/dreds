@@ -6,6 +6,7 @@ import location
 import places
 import nutrition
 import mathematics
+import random
 
 class Animal(entity.Entity):
     def __init__(self):
@@ -61,6 +62,18 @@ class Animal(entity.Entity):
             logging.info('The ' + type(self).__name__ + ' is now at ' + repr(self.location) + '.')
         else:
             logging.info('The ' + type(self).__name__ + ' is immobile!')
+    
+    def get_best_food_place(self):
+        #TODO find some strategy here
+        try:
+            m_food_place = random.sample(self.food_places,1)[0] 
+        except ValueError:
+            # move to some random place
+            logging.info('The ' + type(self).__name__ + ' is moving to a random place.')
+            m_food_place = location.LocationFactory.create_location_around(self.location, 5, 10, 10, 0)
+
+        logging.info('The ' + type(self).__name__ + ' is moving to food place ' + repr(m_food_place))
+        return m_food_place
 
 
     def rest(self):

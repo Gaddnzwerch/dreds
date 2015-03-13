@@ -33,12 +33,6 @@ class BehaviourIdle(Behaviour):
                 m_interested = random.sample(unknown,1)[0]
                 self.__parent.animal.plans.append(plan.Move(self.__parent.animal,m_interested.location))
                 self.__parent.animal.plans.append(plan.Examine(self.__parent.animal,m_interested))
-                """
-                elif len(places) > 0:
-                    m_place = random.sample(places,1)[0]
-                    self.__parent.animal.plans.append(plan.Enter(self.__parent.animal,m_place))
-                    self.__parent.animal.plans.append(plan.Exit(self.__parent.animal,m_place))
-                """
             else:
                 self.__parent.animal.idle()
 
@@ -77,8 +71,8 @@ class BehaviourHunt(Behaviour):
                 #TODO find the best prey
                 prey = random.sample(self.__parent.animal.food_sources,1)[0] 
             except ValueError:
-                self.__parent.animal.add_message("The " + type(self.__parent.animal).__name__ + " is hungry but can't find anything to feed.")
-                pass #TODO no food known yet
+                food_place = self.__parent.animal.get_best_food_place()
+                self.__parent.animal.plans.append(plan.Move(self.__parent.animal, food_place))
             if prey:
                 # move to it 
                 self.__parent.animal.plans.append(plan.Move(self.__parent.animal,prey.location))

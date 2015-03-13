@@ -11,6 +11,7 @@ import mathematics
 import terrain
 from display import Display
 import time
+import copy
 
 class Sourroundings:
 
@@ -24,6 +25,10 @@ class Sourroundings:
         self.MAXX = 50
         self.MAXY = 50
         self.terrain = terrain.Terrain()
+        self.MAXFAUNA = 20
+        location.LocationFactory.s_max_x = self.MAXX
+        location.LocationFactory.s_max_y = self.MAXY
+        
     
     def populate(self):
         self.terrain.add_point(self.locationFactory.create_random_location(0,self.MAXX,0,self.MAXY))
@@ -42,7 +47,7 @@ class Sourroundings:
         self.flora.add(plants.BroadLeafTree())
         self.flora.add(plants.Conifer())
 
-        maxVermin = 5
+        maxVermin = 5 #for initialisation
         noVermin = 0
         while noVermin < maxVermin:
             mouse = vermin.Mouse()
@@ -55,15 +60,16 @@ class Sourroundings:
             self.add_entity(entity)
     
     def vermin(self):
-        mouse = vermin.Mouse()
-        mouse.location = self.locationFactory.create_random_location(self.terrain.min_x,self.terrain.max_x,self.terrain.min_y,self.terrain.max_y)
-        mouse.location.z = self.terrain.get_elevation(mouse.location)
-        self.fauna.add(mouse)
-        self.add_entity(mouse)
+        if len(self.fauna) < self.MAXFAUNA:
+            mouse = vermin.Mouse()
+            mouse.location = self.locationFactory.create_random_location(self.terrain.min_x,self.terrain.max_x,self.terrain.min_y,self.terrain.max_y)
+            mouse.location.z = self.terrain.get_elevation(mouse.location)
+            self.fauna.add(mouse)
+            self.add_entity(mouse)
             
     def add_entity(self,a_entity):
+        quadrant = a_entity.location.get_quadrant()
         try:
-            quadrant = a_entity.location.get_quadrant()
             quadrant = self.quadrants[quadrant]
         except KeyError:
             self.quadrants[quadrant] = quadrant
@@ -72,7 +78,18 @@ class Sourroundings:
             raise 
         finally:
             quadrant.get_inhabitants().add(a_entity)
-    
+
+    def remove_entity(self,a_quadrant, a_entity):
+        try:
+            quadrant = self.quadrants[a_quadrant]
+        except KeyError:
+            pass # nothing to remove
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            raise 
+        finally:
+            quadrant.get_inhabitants().remove(a_entity)
+
 
 def main():
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', filename='dreds.log', level=logging.DEBUG)
@@ -92,9 +109,8 @@ def main():
             entity.life()
             newQuadrant = entity.location.get_quadrant()
             if oldQuadrant != newQuadrant:
-                oldQuadrant.remove(entity)
+                sourroundings.remove_entity(oldQuadrant, entity)
                 sourroundings.add_entity(entity) 
-
 
         for entity in sourroundings.fauna:
             entity.ageing()
