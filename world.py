@@ -83,7 +83,9 @@ def main():
     m_time = gametime.Gametime    
     m_display = Display()
 
-    while True and m_time.tickcount < 50:        
+    while True and m_time.tickcount < 1000:        
+        logging.info(m_time.tickcount)
+
         for entity in sourroundings.population:
             oldQuadrant = entity.location.get_quadrant()
             entity.percieve(sourroundings)
@@ -108,17 +110,17 @@ def main():
         sourroundings.vermin()
         m_time.nextTick()
 
-        m_stringlist = []
-        m_string = []
-        for i in range(0,51):
-            m_string.append(' ')
-        for i in range(0,51):
-            m_stringlist.append(m_string.copy())
+    m_stringlist = []
+    m_string = []
+    for i in range(0,51):
+        m_string.append(' ')
+    for i in range(0,51):
+        m_stringlist.append(m_string.copy())
 
-        for m_quadrant in sourroundings.quadrants:
-            for m_inhabitant in m_quadrant.get_inhabitants():
-                m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
-        m_display.display(m_stringlist)        
+    for m_quadrant in sourroundings.quadrants:
+        for m_inhabitant in m_quadrant.get_inhabitants():
+            m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
+    m_display.display(m_stringlist)        
     logging.info('End')
     
 if __name__=='__main__':

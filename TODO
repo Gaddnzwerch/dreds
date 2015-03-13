@@ -26,3 +26,4 @@
     - costs for different path (upwards / downwards / terrain condition)
 + some sort of graphical representation (what could it look like?) - very rudimentary but working
 - definition outside of the code, creating classes on startup or even during runtime (evolution)
+- #f001 implement some kind of hunting

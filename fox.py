@@ -15,8 +15,8 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
         super(Foxes,self).__init__()
         """basic physical attributes"""
         #has to be calculated from physical aspets - not on every tick, so
-        self.__speed=5    
-        self.__agility = 50
+        self_speed=5    
+        self.agility = 50
         """basic physical states"""
         self.maxExhaust = Fox.maxExhaust
         self.exhaustToTired = self.maxExhaust * Fox.exhaustTired

@@ -13,88 +13,27 @@ class Animal(entity.Entity):
         """logical states"""
         #self.__location = location.Location()
         """phyisical attributes"""
-        self.__speed = 3 #should be used by implementing class
-        self.__strength = 0
-        self.__agility = 5
+        self.speed = 3 #should be used by implementing class
+        self.strength = 0 #should be used by implementing class
+        self.agility = 5 #should be used by implementing class
         """basic physical states"""
-        self.__age = 0
-        self.__hunger = 0
-        self.__exhaust = 0
-        self.__dirty = 0
+        self.age = 0
+        self.hunger = 0
+        self.exhaust = 0
+        self.dirty = 0
         """memory funtions"""
-        self.__noticed = set()
-        self.__sameSpecies = set()
-        self.__plans = plan.Plan()
-        self.__places = set()
+        self.noticed = set()
+        self.same_species = set()
+        self.plans = plan.Plan()
+        self.places = set()
         self.known = set()
-        self.__inside = None
-        self.__foodSources = set()
-    def get_speed(self):
-        return self.__speed
-    speed = property(get_speed)
-
-    def get_agility(self):
-        return self.__agility
-    agility = property(get_agility)
-    
-    def get_age(self):
-        return self.__age
-
-    age = property(get_age)
-
-    def get_hunger(self):
-        return self.__hunger
-    def set_hunger(self,a_hunger):
-        self.__hunger = a_hunger
-    
-    hunger = property(get_hunger,set_hunger)
-
-    def get_exhaust(self):
-        return self.__exhaust
-
-    def set_exhaust(self,a_exhaust):
-        self.__exhaust = a_exhaust
-
-    exhaust = property(get_exhaust,set_exhaust)
+        self.inside = None
+        self.food_sources = set()
+        self.food_places = set()
 
     def catch(self,a_victim):
         logging.debug("plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)
-        return self.__agility >= a_victim.evade(self)
-
-    def get_dirty(self):
-        return self.__dirty
-
-    def set_dirty(self,a_dirty):
-        self.__dirty = a_dirty 
-
-    dirty = property(get_dirty,set_dirty)
-
-    def get_noticed(self):
-        return self.__noticed
-    
-    noticed = property(get_noticed)
-
-    def get_food_sources(self):
-        return self.__foodSources
-    food_sources = property(get_food_sources)
-
-    def get_same_species(self):
-        return self.__sameSpecies
-    same_species = property(get_same_species)
-
-    def get_plans(self):
-        return self.__plans
-    plans = property(get_plans)
-
-    def get_places(self):
-        return self.__places
-    places = property(get_places)
-
-    def get_inside(self):
-        return self.__inside
-    def set_inside(self,a_place):
-        self.__inside = a_place 
-    inside = property(get_inside,set_inside)
+        return self.agility >= a_victim.evade(self)
 
     def add_exhaust(self,a_change):
         self.exhaust += a_change
@@ -114,9 +53,9 @@ class Animal(entity.Entity):
 
     def move(self,a_location):
         m_vector = mathematics.Vector(self.location,a_location)
-        if self.__speed > 0:
-            if m_vector.length >= self.__speed:
-                m_vector.length = self.__speed
+        if self.speed > 0:
+            if m_vector.length >= self.speed:
+                m_vector.length = self.speed
             logging.info('The ' + type(self).__name__ + ' moves to ' + repr(a_location) + ' with a speed of ' + repr(m_vector.length) + '.')
             self.location.add(m_vector)
             logging.info('The ' + type(self).__name__ + ' is now at ' + repr(self.location) + '.')
@@ -168,8 +107,8 @@ class Animal(entity.Entity):
         location = self.get_location()
         for entity in a_sourrounding.quadrants[location.get_quadrant()].get_inhabitants():
             if entity != self:
-                if entity not in self.__noticed:                
-                    self.__noticed.add(entity) 
+                if entity not in self.noticed:                
+                    self.noticed.add(entity) 
                     if issubclass(entity.__class__, nutrition.Nutrition):
                         self.food_sources.add(entity)
         self.unque()                       

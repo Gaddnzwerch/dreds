@@ -84,7 +84,6 @@ class BehaviourHunt(Behaviour):
                 self.__parent.animal.plans.append(plan.Move(self.__parent.animal,prey.location))
                 # catch it
                 self.__parent.animal.plans.append(plan.Catch(self.__parent.animal,prey))
-                # TODO
                 # consume it
                 self.__parent.animal.plans.append(plan.Feed(self.__parent.animal,prey))
         except errors.HungryError:
@@ -96,6 +95,14 @@ class BehaviourHunt(Behaviour):
             return self
         else:
             return BehaviourIdle(self.__parent)
+
+class BehaviourFindPrey(Behaviour):
+    def __init__(self,a_parent):
+        self.__parent = a_parent
+    def act(self):
+        pass
+    def state_check(self):
+        pass
 
 class BehaviourCollapsed(Behaviour):
     def __init__(self,a_parent):
