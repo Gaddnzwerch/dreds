@@ -4,6 +4,7 @@ import animal
 import gender
 import random
 import location
+import logging
 
 class Foxes(animal.Mammal,animal.DenInhabitant):
     maxExhaust = 100          #maxium Exhaust before collapse
@@ -44,9 +45,9 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
         self.hunger = 0
        if self.isHungry != (self.hunger >= Fox.minForHunger):
             if self.hunger >= Fox.minForHunger:          
-                self.add_message("The " + type(self).__name__ + " is getting hungry")
+                logging.debug("The " + type(self).__name__ + " is getting hungry")
             else:
-                self.add_message("The " + type(self).__name__ + " isn't hungry anymore")
+                logging.debug("The " + type(self).__name__ + " isn't hungry anymore")
        self.isHungry = (self.hunger >= Fox.minForHunger)
 
     """actions"""

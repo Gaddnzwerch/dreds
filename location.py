@@ -71,8 +71,6 @@ class LocationFactory:
     s_max_x = 50
     s_max_y = 50
     s_max_z = 50
-    #def create_random_location():
-    #    return Location(random.randint(1,32000),random.randint(1,32000),Location.standardZ)
 
     def create_random_location(a_minX, a_maxX, a_minY , a_maxY):
         return Location(random.randint(a_minX, a_maxX),random.randint(a_minY,a_maxY),Location.standardZ)
@@ -91,13 +89,9 @@ class LocationFactory:
                 m_old_max_x = min(oldLocationArray[0] + a_maxDistanceX, LocationFactory.s_max_x)
                 m_old_min_y = max(oldLocationArray[1] - a_maxDistanceY, LocationFactory.s_min_y)
                 m_old_max_y = min(oldLocationArray[1] + a_maxDistanceY, LocationFactory.s_max_y)
-                # m_old_min_z = max(oldLocationArray[2] - a_maxDistanceZ, LocationFactory.s_min_z)
-                # m_old_max_z = min(oldLocationArray[2] + a_maxDistanceZ, LocationFactory.s_max_z)
 
                 newX = randomint(m_old_min_x, m_old_max_x)
                 newY = randomint(m_old_min_y, m_old_max_y)
-                logging.debug("LocationFactory.create_location_around(): newX:" + repr(newX) + " newY:" + repr(newY))
-                # newZ = randomint(m_old_min_z, m_old_min_z)
                 newLocation = Location(newX,newY,newZ)
                 if newLocation.get_distance(a_oldLocation) >= a_minDistance:
                     return newLocation

@@ -1,45 +1,49 @@
 import random
 import errors
 import plan
+import logging
 
 class Behaviour:    
     def __init__(self,a_animal):
         self.animal = a_animal
-        self.__behaviour = BehaviourIdle(self)    
+        self.behaviour = BehaviourIdle(self)    
 
     def act(self):
         try:
-            self.__behaviour.act()
+            self.behaviour.act()
         except errors.CollapseError:
-            self.__behaviour = BehaviourCollapsed(self)            
+            self.behaviour = BehaviourCollapsed(self)            
         else:
+            logging.debug(type(self.behaviour).__name__ + " state check")
             self.state_check()
 
     def state_check(self):
-        self.__behaviour = self.__behaviour.state_check()
+        self.behaviour = self.behaviour.state_check()
         
 
 class BehaviourIdle(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
+        self.animal = a_parent.animal
+        logging.debug("BehaviorIdle.__init__()")
     def act(self):
         try:
-            self.__parent.animal.plans.execute()
+            self.animal.plans.execute()
         except IndexError:
             #TODO 
-            unknown = self.__parent.animal.noticed - self.__parent.animal.known
-            places = self.__parent.animal.places
+            unknown = self.animal.noticed - self.animal.known
+            places = self.animal.places
             if len(unknown) > 0:
                 m_interested = random.sample(unknown,1)[0]
-                self.__parent.animal.plans.append(plan.Move(self.__parent.animal,m_interested.location))
-                self.__parent.animal.plans.append(plan.Examine(self.__parent.animal,m_interested))
+                self.animal.plans.append(plan.Move(self.animal,m_interested.location))
+                self.animal.plans.append(plan.Examine(self.animal,m_interested))
             else:
-                self.__parent.animal.idle()
+                self.animal.idle()
 
     def state_check(self):
-        if self.__parent.animal.is_hungry():
+        if self.animal.is_hungry():
             return BehaviourHunt(self.__parent)
-        elif self.__parent.animal.is_exhausted():
+        elif self.animal.is_exhausted():
             return BehaviourRest(self.__parent)
         else:
             return self
@@ -47,12 +51,14 @@ class BehaviourIdle(Behaviour):
 class BehaviourRest(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
+        self.animal = a_parent.animal
+        logging.debug("BehaviorRest.__init__()")
     def act(self):
-        self.__parent.animal.rest()
+        self.animal.rest()
     def state_check(self):
-        if self.__parent.animal.is_recovered():
+        if self.animal.is_recovered():
             return BehaviourIdle(self.__parent)
-        elif self.__parent.animal.is_hungry():
+        elif self.animal.is_hungry():
             return BehaviourHunt(self.__parent) 
         else:
             return self
@@ -60,51 +66,48 @@ class BehaviourRest(Behaviour):
 class BehaviourHunt(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
+        self.animal = a_parent.animal
+        logging.debug("BehaviorHunt.__init__()")
     def act(self):
         #TODO hunt
         try:
-            self.__parent.animal.plans.execute()
+            self.animal.plans.execute()
         except IndexError:            
             # find something to hunt
             prey = None
             try:
                 #TODO find the best prey
-                prey = random.sample(self.__parent.animal.food_sources,1)[0] 
+                prey = random.sample(self.animal.food_sources,1)[0] 
             except ValueError:
-                food_place = self.__parent.animal.get_best_food_place()
-                self.__parent.animal.plans.append(plan.Move(self.__parent.animal, food_place))
+                food_place = self.animal.get_best_food_place()
+                self.animal.plans.append(plan.Move(self.animal, food_place))
             if prey:
                 # move to it 
-                self.__parent.animal.plans.append(plan.Move(self.__parent.animal,prey.location))
+                self.animal.plans.append(plan.Move(self.animal,prey.location))
                 # catch it
-                self.__parent.animal.plans.append(plan.Catch(self.__parent.animal,prey))
+                self.animal.plans.append(plan.Catch(self.animal,prey))
                 # consume it
-                self.__parent.animal.plans.append(plan.Feed(self.__parent.animal,prey))
+                self.animal.plans.append(plan.Feed(self.animal,prey))
         except errors.HungryError:
             pass
     def state_check(self):
-        if self.__parent.animal.is_exhausted():
+        if self.animal.is_exhausted():
             return BehaviourRest(self.__parent)    
-        elif self.__parent.animal.is_hungry:
+        elif self.animal.is_hungry:
+            logging.debug("The " + type(self.animal).__name__ + " is still hungry")
             return self
         else:
             return BehaviourIdle(self.__parent)
 
-class BehaviourFindPrey(Behaviour):
-    def __init__(self,a_parent):
-        self.__parent = a_parent
-    def act(self):
-        pass
-    def state_check(self):
-        pass
-
 class BehaviourCollapsed(Behaviour):
     def __init__(self,a_parent):
         self.__parent = a_parent
+        self.animal = a_parent.animal
+        logging.debug("BehaviorCollapsed.__init__()")
     def act(self):
-        self.__parent.animal.rest()
+        self.animal.rest()
     def state_check(self):
-        if self.__parent.animal.is_exhausted():
+        if self.animal.is_exhausted():
             return self
         else:
             return BehaviourIdle(self.__parent)
