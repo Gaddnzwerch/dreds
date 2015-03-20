@@ -7,6 +7,24 @@ import places
 import nutrition
 import mathematics
 import random
+import need
+
+"""
+    Decorators
+"""
+def needFunctions(func):
+    def checkNeedsFirst(self):
+        for m_need in self.needs:
+            for m_action in m_need.fullfillingActions:
+                print(m_action)
+            print(func)
+            if func in m_need.fullfillingActions:
+                print(func.__name__ + " is fullfilling Breathing")
+            else:
+                print(func.__name__ + " is not fullfilling Breathing")
+        func(self)
+    checkNeedsFirst.__name__ = func.__name__                    
+    return checkNeedsFirst
 
 class Animal(entity.Entity):
     def __init__(self):
@@ -31,6 +49,21 @@ class Animal(entity.Entity):
         self.inside = None
         self.food_sources = set()
         self.food_places = set()
+        self.vegetative_actions = set([self.breathe])
+        m_breathing = need.Need("Breathing", 10, 100)
+        m_breathing.fullfillingActions.add(self.breathe)
+        self.needs = set([m_breathing])
+    
+
+    def vegetate(self, a_sourroundings):
+        self.percieve(a_sourroundings)
+        for m_action in self.vegetative_actions:
+            m_action()
+
+
+    @needFunctions
+    def breathe(self):
+        logging.debug("The " + type(self).__name__ + " is breathing")
 
     def catch(self,a_victim):
         logging.debug("plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)

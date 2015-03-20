@@ -100,12 +100,12 @@ def main():
     m_time = gametime.Gametime    
     m_display = Display()
 
-    while True and m_time.tickcount < 1000:        
+    while True and m_time.tickcount < 10:        
         logging.info(m_time.tickcount)
 
         for entity in sourroundings.population:
             oldQuadrant = entity.location.get_quadrant()
-            entity.percieve(sourroundings)
+            entity.vegetate(sourroundings)
             entity.life()
             newQuadrant = entity.location.get_quadrant()
             if oldQuadrant != newQuadrant:
@@ -136,7 +136,7 @@ def main():
     for m_quadrant in sourroundings.quadrants:
         for m_inhabitant in m_quadrant.get_inhabitants():
             m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
-    m_display.display(m_stringlist)        
+#DEBUG     m_display.display(m_stringlist)        
     logging.info('End')
     
 if __name__=='__main__':

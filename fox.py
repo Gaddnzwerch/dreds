@@ -28,7 +28,7 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
         self.satisfaction=0
         self.isHungry=False
         """behaviours"""
-        self.__behaviour = behaviour.Behaviour(self)
+        self.behaviour = behaviour.Behaviour(self)
         """memories"""
     """basic actions"""
 
@@ -52,7 +52,7 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
 
     """actions"""
     def life(self):        
-        self.__behaviour.act()
+        self.behaviour.act()
 
     def is_same_species(self,a_other):
         return issubclass(Fox,a_other.__class__) 

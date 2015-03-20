@@ -6,7 +6,7 @@ import logging
 class Behaviour:    
     def __init__(self,a_animal):
         self.animal = a_animal
-        self.behaviour = BehaviourIdle(self)    
+        self.behaviour = BehaviourIdle(self) # the active behaviour
 
     def act(self):
         try:
@@ -111,3 +111,5 @@ class BehaviourCollapsed(Behaviour):
             return self
         else:
             return BehaviourIdle(self.__parent)
+
+

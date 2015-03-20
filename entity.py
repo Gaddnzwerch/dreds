@@ -6,6 +6,7 @@ class Entity:
         self.__age = 0
         self.__message = ''
         self.__notifiation = [] #contains informations about incidents 
+        self.dna = '' #TODO stores informations about the features an entity has - will be used to create further instances
     def get_location(self):
         return self.__location
     def set_location(self,a_location):
@@ -40,3 +41,6 @@ class Entity:
 
     def ageing(self):
         self.age += 1
+
+    def vegetate(self, a_sourrounding):
+        pass

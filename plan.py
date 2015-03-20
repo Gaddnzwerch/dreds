@@ -1,8 +1,13 @@
 import collections
 
+class PlanFactory():
+    def __init__(self):
+        pass
+
+
 class Plan(collections.deque):
     """
-        Plans are used to store Queus of commands or even other plans.
+        Plans are used to store Queues of commands or even other plans.
     """
     def __init__(self):
         collections.deque.__init__(self)
@@ -13,6 +18,11 @@ class Plan(collections.deque):
             pass
         else:
             self.appendleft(command)
+    #TODO modify a plan
+    def modify(self):
+        pass
+    #TODO get a plan's representation
+
 class Command():
     """
         Commands are the smalest unit. They can be executed by an entity.
