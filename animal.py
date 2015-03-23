@@ -15,10 +15,7 @@ import need
 def needFunctions(func):
     def checkNeedsFirst(self):
         for m_need in self.needs:
-            for m_action in m_need.fullfillingActions:
-                print(m_action)
-            print(func)
-            if func in m_need.fullfillingActions:
+            if func.__name__ in m_need.fullfillingActions.keys():
                 print(func.__name__ + " is fullfilling Breathing")
             else:
                 print(func.__name__ + " is not fullfilling Breathing")
@@ -51,7 +48,7 @@ class Animal(entity.Entity):
         self.food_places = set()
         self.vegetative_actions = set([self.breathe])
         m_breathing = need.Need("Breathing", 10, 100)
-        m_breathing.fullfillingActions.add(self.breathe)
+        m_breathing.fullfillingActions['breathe'] =  self.breathe
         self.needs = set([m_breathing])
     
 
