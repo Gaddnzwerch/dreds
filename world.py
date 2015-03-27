@@ -100,7 +100,7 @@ def main():
     m_time = gametime.Gametime    
     m_display = Display()
 
-    while True and m_time.tickcount < 10:        
+    while True and m_time.tickcount < 1000:        
         logging.info(m_time.tickcount)
 
         for entity in sourroundings.population:

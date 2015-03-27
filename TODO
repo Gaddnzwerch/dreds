@@ -1,3 +1,7 @@
+- #f002 needs and their fulfillment
+    o level of increase/decrease depending on the action
++ #f001 implement some kind of hunting 7d9fc6494ed6b94fa0cfa4c0280f61e4fff1dc6a
++ some sort of graphical representation (what could it look like?) - very rudimentary but working
 + Logging
 - TestCases - switch to test driven developement
 - Generate Terrain
@@ -24,17 +28,14 @@
     - test if a vector intersects a triangle
 - Pathfinding    
     - costs for different path (upwards / downwards / terrain condition)
-+ some sort of graphical representation (what could it look like?) - very rudimentary but working
 - definition outside of the code, creating classes on startup or even during runtime (evolution)
-+ #f001 implement some kind of hunting 7d9fc6494ed6b94fa0cfa4c0280f61e4fff1dc6a
 - remove private variables where possible - it's not very pythonic : entity.py location.py 
 - add persistence
 - plans for resting
-- #f002 possibility to store / change / rate plans
+- possibility to store / change / rate plans
     o every plan has to have some goal
     o every plan has to consist of one or more steps to reach that goal
     o an entity can rate the effectiveness of that plan to reach that goal
     o it should be possible to change and modify plans
-    o needs and their fulfillment
 - interface: abort, pause, restart world via keyboard
 - add biomes

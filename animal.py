@@ -8,21 +8,27 @@ import nutrition
 import mathematics
 import random
 import need
+from functools import wraps
 
 """
     Decorators
 """
 def needFunctions(func):
-    def checkNeedsFirst(self):
+    @wraps(func)
+    def checkNeedsFirst(*args):
+        self = args[0]
         for m_need in self.needs:
             if func.__name__ in m_need.fullfillingActions.keys():
-                print(func.__name__ + " is fullfilling Breathing")
-            else:
-                print(func.__name__ + " is not fullfilling Breathing")
-        func(self)
-    checkNeedsFirst.__name__ = func.__name__                    
+                m_need.level -= 10
+            if func.__name__ in m_need.creatingActions.keys():
+                print("not fullfilling")
+                m_need.level += 1
+        func(*args)
     return checkNeedsFirst
 
+"""
+    Classes
+"""
 class Animal(entity.Entity):
     def __init__(self):
         entity.Entity.__init__(self)
@@ -37,7 +43,7 @@ class Animal(entity.Entity):
         self.hunger = 0
         self.exhaust = 0
         self.dirty = 0
-        """memory funtions"""
+        """memory functions"""
         self.noticed = set()
         self.same_species = set()
         self.plans = plan.Plan()
@@ -46,10 +52,15 @@ class Animal(entity.Entity):
         self.inside = None
         self.food_sources = set()
         self.food_places = set()
-        self.vegetative_actions = set([self.breathe])
+        """vegetative actions"""
+        self.vegetative_actions = set([self.breathe]) 
+        """needs"""
         m_breathing = need.Need("Breathing", 10, 100)
         m_breathing.fullfillingActions['breathe'] =  self.breathe
         self.needs = set([m_breathing])
+        m_eating = need.Need("Eating", 7, 250)
+        m_eating.fullfillingActions['feed'] = self.feed
+        self.needs.add(m_eating)
     
 
     def vegetate(self, a_sourroundings):
@@ -73,6 +84,7 @@ class Animal(entity.Entity):
         elif self.exhaust >= self.maxExhaust:
             self.collapse()
 
+    @needFunctions
     def move(self):
         logging.info('The ' + type(self).__name__ + ' moves')
         self.add_hunger(5)
@@ -106,6 +118,7 @@ class Animal(entity.Entity):
         return m_food_place
 
 
+    @needFunctions
     def rest(self):
         logging.info('The '+ type(self).__name__ + ' rests')
         self.add_exhaust(-20)
@@ -136,6 +149,7 @@ class Animal(entity.Entity):
         self.boredness += 1
         self.add_exhaust(-5)
 
+    @needFunctions
     def feed(self,a_nutrition):
         logging.info("The " + type(self).__name__+ " feeds on the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
         self.add_exhaust(1)
@@ -200,6 +214,7 @@ class Mammal(Animal):
     def percieve(self,a_sourrounding):
         Animal.percieve(self,a_sourrounding)
 
+    @needFunctions
     def have_sex(self,a_with):
         pass
 
