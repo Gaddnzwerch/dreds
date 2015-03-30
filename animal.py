@@ -18,11 +18,7 @@ def needFunctions(func):
     def checkNeedsFirst(*args):
         self = args[0]
         for m_need in self.needs:
-            if func.__name__ in m_need.fullfillingActions.keys():
-                m_need.level -= 10
-            if func.__name__ in m_need.creatingActions.keys():
-                print("not fullfilling")
-                m_need.level += 1
+            m_need.act(func)
         func(*args)
     return checkNeedsFirst
 
@@ -56,13 +52,18 @@ class Animal(entity.Entity):
         self.vegetative_actions = set([self.breathe]) 
         """needs"""
         m_breathing = need.Need("Breathing", 10, 100)
-        m_breathing.fullfillingActions['breathe'] =  self.breathe
+        m_breathing.add_fulfilling_action('breathe',10)
+        m_breathing.add_creating_action('vegetate', 1)
+        m_breathing.add_creating_action('move', 5)
         self.needs = set([m_breathing])
         m_eating = need.Need("Eating", 7, 250)
-        m_eating.fullfillingActions['feed'] = self.feed
+        m_eating.add_fulfilling_action('feed',10)
+        m_eating.add_creating_action('vegetate', 0.01)
+        m_eating.add_creating_action('move', 0.05)
         self.needs.add(m_eating)
     
 
+    @needFunctions
     def vegetate(self, a_sourroundings):
         self.percieve(a_sourroundings)
         for m_action in self.vegetative_actions:
@@ -74,7 +75,7 @@ class Animal(entity.Entity):
         logging.debug("The " + type(self).__name__ + " is breathing")
 
     def catch(self,a_victim):
-        logging.debug("plan.Catch.execute() - The "+ type(self).__name__+ " tries to catch the "+ type(a_victim).__name__)
+        logging.debug("plan.Catch.execute() - The " + type(self).__name__ + " tries to catch the "+ type(a_victim).__name__)
         return self.agility >= a_victim.evade(self)
 
     def add_exhaust(self,a_change):
@@ -94,6 +95,7 @@ class Animal(entity.Entity):
         self.satisfaction += 1
         self.dirty += 1
 
+    @needFunctions
     def move(self,a_location):
         m_vector = mathematics.Vector(self.location,a_location)
         if self.speed > 0:
