@@ -163,7 +163,7 @@ class Animal(entity.Entity):
 
     def percieve(self,a_sourrounding):
         #TODO just see everything in the same quadrant
-        location = self.get_location()
+        location = self.location
         for entity in a_sourrounding.quadrants[location.get_quadrant()].get_inhabitants():
             if entity != self:
                 if entity not in self.noticed:                
@@ -222,12 +222,7 @@ class Mammal(Animal):
 
 class DenInhabitant():
     def __init__(self):
-        self.__den = None
-    def get_den(self):
-        return self.__den
-    def set_den(self,a_den):
-        self.__den = a_den
-    den =  property(get_den,set_den)
+        self.den = None
 """
     Does belong more in Behaviour?
 """

@@ -2,63 +2,65 @@ import copy
 
 class Vector():
     def __init__(self,a_point1,a_point2):
-        self.__origin = a_point1
+        self.origin = a_point1
         self.__target = a_point2
-        self.__dirX = a_point2.m_x - a_point1.m_x + 0.0
-        self.__dirY = a_point2.m_y - a_point1.m_y + 0.0
-        self.__dirZ = a_point2.m_z - a_point1.m_z + 0.0
+        self.__dirX = a_point2.x - a_point1.x + 0.0
+        self.__dirY = a_point2.y - a_point1.y + 0.0
+        self.__dirZ = a_point2.z - a_point1.z + 0.0
         self.__length = 0.0
-    def get_x(self):
+
+    @property
+    def x(self):
         return self.__dirX
-    def set_x(self,a_x):
+    @x.setter
+    def x(self,a_x):
         self.__length = 0.0
         self.__dirX = a_x
-    x = property(get_x,set_x)
 
-    def get_y(self):
+    @property
+    def y(self):
         return self.__dirY
-    def set_y(self,a_y):
+    @y.setter
+    def y(self,a_y):
         self.__length = 0.0
         self.__dirY = a_y
-    y = property(get_y,set_y)
 
-    def get_z(self):
+    @property
+    def z(self):
         return self.__dirZ
-    def set_z(self,a_z):
+    @z.setter
+    def z(self,a_z):
         self.__length = 0.0
         self.__dirZ = a_z
-    z = property(get_z,set_z)
 
-    def get_points(self):
+    @property
+    def points(self):
         points = set()
         points.add(self.origin)
         points.add(self.target)
         return points
-    points = property(get_points)
 
-    def get_length(self):
+    @property
+    def length(self):
         if self.__length != 0.0:
             return self.__length
         else:
             self.__length = (self.__dirX**2 + self.__dirY**2 + self.__dirZ**2)**0.5
             return self.__length
-    def set_length(self,a_length):
+    @length.setter
+    def length(self,a_length):
         self.__dirX = (self.x / self.length) * a_length
         self.__dirY = (self.y / self.length) * a_length
         self.__dirZ = (self.z / self.length) * a_length
         self.__length = a_length
-    length = property(get_length,set_length) 
     
     def __str__(self):
         return ('Vector %s->%s') % (self.origin.__str__(), self.target.__str__())
     
-    def get_origin(self):
-        return self.__origin
-    origin = property(get_origin)
 
-    def get_target(self):
-        return Point(self.__origin.x + self.__dirX, self.__origin.y + self.__dirY, self.__origin.z + self.__dirZ)
-    target = property(get_target)
+    @property
+    def target(self):
+        return Point(self.origin.x + self.__dirX, self.origin.y + self.__dirY, self.origin.z + self.__dirZ)
 
     def dot_product(self,a_vector):
        return (self.x * a_vector.x + self.y * a_vector.y + self.z * a_vector.z)
@@ -79,43 +81,31 @@ class Flat():
     """
     def __init__(self, a_vector1, a_vector2):
         if (a_vector1.origin == a_vector2.origin):
-            self.__vector1 = a_vector1
-            self.__vector2 = a_vector2
-            self.__normal = self.__vector1.cross_product(self.__vector2)
+            self.vector1 = a_vector1
+            self.vector2 = a_vector2
+            self.normal = self.vector1.cross_product(self.vector2)
             self.__circumscribed_circle = None
         else:
             raise Exception("Vectors don't have the same origin")
     
-    def get_vector1(self):
-        return self.__vector1
-    vector1 = property(get_vector1)
-
-    def get_vector2(self):
-        return self.__vector2
-    vector2 = property(get_vector2)
-
-    def get_vector3(self):
-        return Vector(self.__vector1.target,self.__vector2.target)
-    vector3 = property(get_vector3)
+    @property
+    def vector3(self):
+        return Vector(self.vector1.target,self.vector2.target)
     
-    def get_normal(self):
-        return self.__normal
-    normal = property(get_normal)
-
-    def get_origin(self):
-        return self.__vector1.origin
-    origin = property(get_origin)
+    @property
+    def origin(self):
+        return self.vector1.origin
 
     def get_vector_of(self,a_point):
         """
             if a_point lies on a border of the flat, return the corresponding border, else None
         """
         return_vector = None
-        v1 = copy.copy(self.__vector1)
+        v1 = copy.copy(self.vector1)
         v1.z = 0
-        v2 = copy.copy(self.__vector2)
+        v2 = copy.copy(self.vector2)
         v2.z = 0
-        v3 = Vector(self.__vector1.origin,a_point)
+        v3 = Vector(self.vector1.origin,a_point)
         v3.z = 0
         
         # Compute dot products
@@ -143,11 +133,11 @@ class Flat():
             Returns true if the x,y value of a loctation lies in the baseplain of the flat (z=0)
             Algorithm from http://www.blackpawn.com/texts/pointinpoly/default.html
         """
-        v1 = copy.copy(self.__vector1)
+        v1 = copy.copy(self.vector1)
         v1.z = 0
-        v2 = copy.copy(self.__vector2)
+        v2 = copy.copy(self.vector2)
         v2.z = 0
-        v3 = Vector(self.__vector1.origin,a_point)
+        v3 = Vector(self.vector1.origin,a_point)
         v3.z = 0
         
         # Compute dot products
@@ -225,14 +215,13 @@ class Flat():
         S = c4d.Vector(Gp.x + (Gr.x * t),Gp.y + (Gr.y * t),Gp.z + (Gr.z * t))
         return S
 
-    def get_points(self):
+    @property
+    def points(self):
         points = set()
-        points.add(self.__vector1.origin)
-        points.add(self.__vector1.target)
-        points.add(self.__vector2.target)
+        points.add(self.vector1.origin)
+        points.add(self.vector1.target)
+        points.add(self.vector2.target)
         return points
-    points = property(get_points)
-
 
     def is_adjacent(self, a_other_flat):
         return(len(a_other_flat.points & self.points)>0)
@@ -246,52 +235,37 @@ class Point():
     """
     standardZ = 1.0
     def __init__(self,a_x=0.0, a_y=0.0, a_z=standardZ):
-        self.m_x = a_x
-        self.m_y = a_y
-        self.m_z = a_z
+        self.x = a_x
+        self.y = a_y
+        self.z = a_z
     def __eq__(self,other):
         if type(self) == type(other) or issubclass(self.__class__,other.__class__) or issubclass(other.__class__,self.__class__):
-            return self.m_x == other.m_x and self.m_y == other.m_y and self.m_z == other.m_z
+            return self.x == other.x and self.y == other.y and self.z == other.z
         else:
             return False
     def __hash__(self):
-        return(hash("%6d%6d%6d" % (self.m_x,self.m_y,self.m_z)))  
+        return(hash("%6d%6d%6d" % (self.x,self.y,self.z)))  
         
     def __str__(self):
-        return("Point x:%.2f,y:%.2f,z:%.2f" % (self.m_x, self.m_y, self.m_z))
+        return("Point x:%.2f,y:%.2f,z:%.2f" % (self.x, self.y, self.z))
     def get_array(self):
-        return [self.m_x,self.m_y,self.m_z]
+        return [self.x,self.y,self.z]
 
     def add(self,a_vector):
-        self.m_x += a_vector.x
-        self.m_y += a_vector.y
-        self.m_z += a_vector.z
-
-    def get_x(self):
-        return self.m_x
-    x = property(get_x)
-
-    def get_y(self):
-        return self.m_y
-    y = property(get_y)
-
-    def get_z(self):
-        return self.m_z
-    def set_z(self, a_z):
-        self.m_z = a_z
-    z = property(get_z, set_z)
+        self.x += a_vector.x
+        self.y += a_vector.y
+        self.z += a_vector.z
 
 class Circle():
     """
         As the name says it
     """
     def __init__(self, a_point, a_radius):
-        self.__center = a_point
-        self.__radius = a_radius
+        self.center = a_point
+        self.radius = a_radius
     
     def is_point_in(self,a_point):
-       # print ("DEBUG: mathematics.Circle.is_point_in - ", self.__center, a_point, self.__radius)
-       return ((self.__center.x - a_point.x)**2 + ((self.__center.y - a_point.y)**2)) <= self.__radius**2 
+       return ((self.center.x - a_point.x)**2 + ((self.center.y - a_point.y)**2)) <= self.radius**2 
     
     def __str__(self):
-        return ("Circle  %s radius %s") % (self.__center, self.__radius)
+        return ("Circle  %s radius %s") % (self.center, self.radius)

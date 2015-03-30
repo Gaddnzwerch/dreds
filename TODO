@@ -1,4 +1,5 @@
-+ #f002 needs and their fulfillment
+- #f003 remove private variables where possible - it's not very pythonic : entity.py location.py 
++ #f002 needs and their fulfillment 4238332
     + level of increase/decrease depending on the action
 + #f001 implement some kind of hunting 7d9fc6494ed6b94fa0cfa4c0280f61e4fff1dc6a
 + some sort of graphical representation (what could it look like?) - very rudimentary but working
@@ -29,7 +30,6 @@
 - Pathfinding    
     - costs for different path (upwards / downwards / terrain condition)
 - definition outside of the code, creating classes on startup or even during runtime (evolution)
-- remove private variables where possible - it's not very pythonic : entity.py location.py 
 - add persistence
 - plans for resting
 - possibility to store / change / rate plans

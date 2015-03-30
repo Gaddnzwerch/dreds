@@ -6,36 +6,19 @@ class Terrain():
     def __init__(self):
         self.__flats = set()
         self.__adjacent_flats = dict()
-        self.__min_x = 0
-        self.__max_x = 50
-        self.__min_y = 0
-        self.__max_y = 50
+        self.min_x = 0
+        self.max_x = 50
+        self.min_y = 0
+        self.max_y = 50
         height = 1
-        v1 = mathematics.Vector(location.Location(self.__min_x,self.__min_y,height),location.Location(self.__min_x,self.__max_y,height))
-        v2 = mathematics.Vector(location.Location(self.__min_x,self.__min_y,height),location.Location(self.__max_x,self.__min_y,height))
+        v1 = mathematics.Vector(location.Location(self.min_x,self.min_y,height),location.Location(self.min_x,self.max_y,height))
+        v2 = mathematics.Vector(location.Location(self.min_x,self.min_y,height),location.Location(self.max_x,self.min_y,height))
         self.__flats.add(mathematics.Flat(v1,v2))
-        v1 = mathematics.Vector(location.Location(self.__max_x,self.__max_y,height),location.Location(self.__max_x,self.__min_y,height))
-        v2 = mathematics.Vector(location.Location(self.__max_x,self.__max_y,height),location.Location(self.__min_x,self.__max_y,height))
+        v1 = mathematics.Vector(location.Location(self.max_x,self.max_y,height),location.Location(self.max_x,self.min_y,height))
+        v2 = mathematics.Vector(location.Location(self.max_x,self.max_y,height),location.Location(self.min_x,self.max_y,height))
         self.__flats.add(mathematics.Flat(v1,v2)) 
         self.__get_adjacent_flats()
         
-        # print("DEBUG: terrain.Terrain.__init__() - ", self.__adjacent_flats)
-    def get_max_x(self):
-        return self.__max_x
-    max_x = property(get_max_x)
-
-    def get_max_y(self):
-        return self.__max_y
-    max_y = property(get_max_y)
-
-    def get_min_x(self):
-        return self.__min_x
-    min_x = property(get_min_x)
-
-    def get_min_y(self):
-        return self.__min_y
-    min_y = property(get_min_y)
-    
     def __get_adjacent_flats(self):
         for flat in self.__flats:
             # print("DEBUG: terrain.Terrain.__init__() - ",flat)

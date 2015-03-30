@@ -10,7 +10,7 @@ class Location(mathematics.Point):
         super(Location,self).__init__(a_x,a_y,a_z)
 
     def get_quadrant(self):
-        return Quadrant(int(self.m_x/Quadrant.resolution),int(self.m_y/Quadrant.resolution),int(self.m_z/Quadrant.resolution))
+        return Quadrant(int(self.x/Quadrant.resolution),int(self.y/Quadrant.resolution),int(self.z/Quadrant.resolution))
 
     def get_distance(self,a_location): 
         return Line(self.get_array(),a_location.get_array()).distance()
@@ -107,10 +107,10 @@ class LocationFactory:
             Creates a random location in a given quadrant.
         """
         randomint = random.randint
-        newX = randomint(a_quadrant.m_x * Quadrant.resolution, a_quadrant.m_x * (Quadrant.resolution) + Quadrant.resolution)
-        newY = randomint(a_quadrant.m_y * Quadrant.resolution, a_quadrant.m_y * (Quadrant.resolution) + Quadrant.resolution)
+        newX = randomint(a_quadrant.x * Quadrant.resolution, a_quadrant.x * (Quadrant.resolution) + Quadrant.resolution)
+        newY = randomint(a_quadrant.y * Quadrant.resolution, a_quadrant.y * (Quadrant.resolution) + Quadrant.resolution)
         try:
-            newZ = randomint(a_quadrant.m_z * Quadrant.resolution, a_quadrant.m_z * (Quadrant.resolution + 1)-1)
+            newZ = randomint(a_quadrant.z * Quadrant.resolution, a_quadrant.z * (Quadrant.resolution + 1)-1)
         except ValueError:
             newZ = Location.standardZ
         return Location(newX,newY,newZ)

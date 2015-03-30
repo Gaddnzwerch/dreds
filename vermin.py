@@ -9,28 +9,24 @@ class Vermin(entity.Entity, nutrition.Nutrition):
     """
     def __init__(self, aNutritionValue, aAgility):
         entity.Entity.__init__(self)
-        self.__nutritionValue = aNutritionValue
-        self.__agility = aAgility
+        self.nutritionValue = aNutritionValue
+        self.agility = aAgility
 
-    def getNutritionValue(self):
-        return self.__nutritionValue
-    nutrition_value = property(getNutritionValue)
-
-    def get_agility(self):
-        return self.__agility
-    agility = property(get_agility)
+    @property
+    def nutrition_value(self):
+        return self.nutritionValue
 
     def evade(self, a_other):
         #TODO a little bit more elaborated
-        return random.randrange(1,self.__agility)
+        return random.randrange(1,self.agility)
 class Mouse(Vermin):
     
     def __init__(self):
         logging.debug('Created a mouse')
-        super(Mouse, self).__init__(100, 75) 
+        super().__init__(100, 75) 
 
     def ageing(self):
-        super(Mouse, self).ageing()
+        super().ageing()
         try:
             randomint = random.randrange(100-self.age) 
             if randomint == 1:
