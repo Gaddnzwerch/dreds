@@ -49,26 +49,31 @@ class Animal(entity.Entity):
         self.food_sources = set()
         self.food_places = set()
         """vegetative actions"""
-        self.vegetative_actions = set([self.breathe]) 
+        self.vegetative_actions = set() 
         """needs"""
-        m_breathing = need.Need("Breathing", 10, 100)
-        m_breathing.add_fulfilling_action('breathe',10)
-        m_breathing.add_creating_action('vegetate', 1)
-        m_breathing.add_creating_action('move', 5)
-        self.needs = set([m_breathing])
+        self.needs = set()
+        m_breathing = need.Need("Breathing", 10, 100, 50)
+        m_breathing.add_fulfilling_action(self.breathe,10.0)
+        m_breathing.add_creating_action(self.vegetate, 1.0)
+        m_breathing.add_creating_action(self.move, 5.0)
+        self.needs.add(m_breathing)
         m_eating = need.Need("Eating", 7, 250)
-        m_eating.add_fulfilling_action('feed',10)
-        m_eating.add_creating_action('vegetate', 0.01)
-        m_eating.add_creating_action('move', 0.05)
+        m_eating.add_fulfilling_action(self.feed,10.0)
+        m_eating.add_creating_action(self.vegetate, 0.01)
+        m_eating.add_creating_action(self.move, 0.05)
         self.needs.add(m_eating)
-    
 
-    @needFunctions
+    def check_needs(self):
+        for m_need in self.needs:
+            if m_need.needsAction:
+                self.vegetative_actions.add(m_need.fulfillingAction)
+    
     def vegetate(self, a_sourroundings):
         self.percieve(a_sourroundings)
+        self.check_needs()
         for m_action in self.vegetative_actions:
             m_action()
-
+        self.vegetative_actions.clear()
 
     @needFunctions
     def breathe(self):

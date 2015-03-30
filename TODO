@@ -1,7 +1,8 @@
-- #f003 remove private variables where possible - it's not very pythonic : entity.py location.py 
-+ #f002 needs and their fulfillment 4238332
+- #f004 needs trigger vegetative actions
++ #f003 remove private variables where possible - it's not very pythonic : entity.py location.py #a41779e
++ #f002 needs and their fulfillment #4238332
     + level of increase/decrease depending on the action
-+ #f001 implement some kind of hunting 7d9fc6494ed6b94fa0cfa4c0280f61e4fff1dc6a
++ #f001 implement some kind of hunting #7d9fc64
 + some sort of graphical representation (what could it look like?) - very rudimentary but working
 + Logging
 - TestCases - switch to test driven developement
@@ -40,3 +41,6 @@
 - interface: abort, pause, restart world via keyboard
 - add biomes
 - general traces left behind (smell, trample, heat, ...)
+- Factory for entity-creation (add needs, initial values, ...)
+- check sourroundings for vegetative functions
+- BUG int / NONE
