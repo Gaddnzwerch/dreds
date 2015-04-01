@@ -2,7 +2,6 @@ import logging
 import location
 import plan
 import entity
-import location
 import places
 import nutrition
 import mathematics
@@ -26,6 +25,7 @@ def needFunctions(func):
     Classes
 """
 class Animal(entity.Entity):
+
     def __init__(self):
         entity.Entity.__init__(self)
         """logical states"""
@@ -43,45 +43,100 @@ class Animal(entity.Entity):
         self.noticed = set()
         self.same_species = set()
         self.plans = plan.Plan()
+        self.strategy = plan.Strategy()
+        self.active_plan = plan.Plan()
         self.places = set()
         self.known = set()
         self.inside = None
         self.food_sources = set()
-        self.food_places = set()
+        self.food_places = set() 
         """vegetative actions"""
         self.vegetative_actions = set() 
         """needs"""
+        self.needsAttention = set()
         self.needs = set()
-        m_breathing = need.Need("Breathing", 10, 100, 50)
+        m_breathing = need.Need("Air", 10, 100, 50)
         m_breathing.add_fulfilling_action(self.breathe,10.0)
         m_breathing.add_creating_action(self.vegetate, 1.0)
         m_breathing.add_creating_action(self.move, 5.0)
         self.needs.add(m_breathing)
-        m_eating = need.Need("Eating", 7, 250)
+        m_eating = need.Need("Food", 7, 250)
         m_eating.add_fulfilling_action(self.feed,10.0)
         m_eating.add_creating_action(self.vegetate, 0.01)
         m_eating.add_creating_action(self.move, 0.05)
         self.needs.add(m_eating)
+        """requirements"""
+        self.requirements = []
+        m_food_place = plan.Requirement("foodplace", self.get_best_food_place)
+        self.requirements.append(m_food_source)
+        m_food_source = plan.Requirement("foodsource",self.choose_food_source,m_food_place) 
+        self.requirements.append(m_food_source)
+        """commands"""
+        self.commands = set()
+        self.commands.add(plan.Move)
 
     def check_needs(self):
-        for m_need in self.needs:
+        for m_need in self.needs: 
+            self.needsAttention.clear()
             if m_need.needsAction:
                 self.vegetative_actions.add(m_need.fulfillingAction)
+            if m_need.needsAttention and m_need not in self.needsAttention:
+                self.needsAttention.add(m_need)
+                logging.info("The " + type(self).__name__ + " feels the need for " + m_need.name)
+
+    def access_food_source(self):
+        pass
+
+    def choose_food_source(self): 
+        try:
+            return random.sample(self.food_sources,1)[0] 
+        except ValueError:
+            return None
+
+
+    def plan(self):
+        """
+        creating, rating and modifying plans
+        At the beginning, each entity can create only one plan per tick
+        """
+        m_need = self.get_need()
+        logging.debug("The " + type(self).__name__ + " is thinking about " + m_need.name)
+        m_plan = plan.PlanFactory.create_plan(self.strategy, m_need)
+
+    def rate_plan(self, a_plan):
+        """
+        rating plans
+        """
+        pass
+
+    def get_need(self):
+        """
+        find the most pestering need
+        """
+        try:
+            m_need =  self.needsAttention.pop()
+        except KeyError:
+            m_need = sorted(self.needs, key= lambda need: need.weight, reverse=True) 
+            m_need = m_need[0]
+        return m_need
+
     
+    @needFunctions
     def vegetate(self, a_sourroundings):
+        """
+        actions that are supposed to happen every tick
+        """
         self.percieve(a_sourroundings)
         self.check_needs()
         for m_action in self.vegetative_actions:
             m_action()
         self.vegetative_actions.clear()
+        self.plan()
 
     @needFunctions
     def breathe(self):
         logging.debug("The " + type(self).__name__ + " is breathing")
 
-    def catch(self,a_victim):
-        logging.debug("plan.Catch.execute() - The " + type(self).__name__ + " tries to catch the "+ type(a_victim).__name__)
-        return self.agility >= a_victim.evade(self)
 
     def add_exhaust(self,a_change):
         self.exhaust += a_change
@@ -150,6 +205,7 @@ class Animal(entity.Entity):
         self.exhaustToTired = self.exhaustToTired * Fox.exhaustTiredReduce
         raise Errors.CollapseError()
 
+    @needFunctions
     def idle(self):
         logging.info("The " + type(self).__name__ + " idles.")
         self.add_hunger(1)
@@ -173,10 +229,10 @@ class Animal(entity.Entity):
             if entity != self:
                 if entity not in self.noticed:                
                     self.noticed.add(entity) 
-                    if issubclass(entity.__class__, nutrition.Nutrition):
+                    if self.is_nutrition(entity):
                         self.food_sources.add(entity)
         self.unque()                       
-    
+
     def unque(self):
         remove = set()
         for entity in self.noticed | self.food_sources | self.known:
@@ -213,6 +269,13 @@ class Animal(entity.Entity):
     
     def is_same_species(self,a_other):
         pass
+
+class AnimalBuilder():
+    def __init__(self):
+        pass
+    def create(self):
+        pass
+
 class Mammal(Animal):
     def __init__(self):
         Animal.__init__(self)
@@ -228,13 +291,23 @@ class Mammal(Animal):
 class DenInhabitant():
     def __init__(self):
         self.den = None
-"""
-    Does belong more in Behaviour?
-"""
-class Carnivore:
-    pass
+
+class Carnivore():
+    def __init__(self):
+        pass
+
+    def is_nutrition(self, a_entity):
+        return issubclass(a_entity.__class__, nutrition.Nutrition)
+
+    def catch(self,a_victim):
+        #TODO maybe a bit more elaborate
+        logging.debug("Carnivore().catch() - The " + type(self).__name__ + " tries to catch the "+ type(a_victim).__name__)
+        return self.agility >= a_victim.evade(self)
+
 class Cannibal(Carnivore):
-    pass
+
+    def is_nutrition(self, a_entity):
+        return super(Cannibal, self).is_nutrition(a_entity) or self.is_same_species(a_entity)
 
 class FieldOfView(mathematics.Flat):
     def __init__(self, a_distance, a_angle):

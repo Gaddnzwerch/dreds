@@ -19,6 +19,7 @@ class Vermin(entity.Entity, nutrition.Nutrition):
     def evade(self, a_other):
         #TODO a little bit more elaborated
         return random.randrange(1,self.agility)
+
 class Mouse(Vermin):
     
     def __init__(self):

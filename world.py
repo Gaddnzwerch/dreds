@@ -136,7 +136,7 @@ def main():
     for m_quadrant in sourroundings.quadrants:
         for m_inhabitant in m_quadrant.get_inhabitants():
             m_stringlist[int(m_inhabitant.location.x)][int(m_inhabitant.location.y)] = type(m_inhabitant).__name__[0]
-#DEBUG     m_display.display(m_stringlist)        
+    #DEBUG m_display.display(m_stringlist)        
     logging.info('End')
     
 if __name__=='__main__':

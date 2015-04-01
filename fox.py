@@ -5,8 +5,10 @@ import gender
 import random
 import location
 import logging
+import pickle
+import need
 
-class Foxes(animal.Mammal,animal.DenInhabitant):
+class Foxes(animal.Mammal,animal.DenInhabitant, animal.Carnivore): # , animal.Carnivore):
     maxExhaust = 100          #maxium Exhaust before collapse
     exhaustTired = .8         #Exhaust before the individual feels tired
     exhaustTiredReduce = .9   #how much exhaustTired is reduces when an individual collapses
@@ -15,8 +17,8 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
     def __init__(self):
         super(Foxes,self).__init__()
         """basic physical attributes"""
-        #has to be calculated from physical aspets - not on every tick, so
-        self_speed=5    
+        #TODO has to be calculated from physical aspets - not on every tick, so
+        self.speed=5    
         self.agility = 50
         """basic physical states"""
         self.maxExhaust = Fox.maxExhaust
@@ -30,6 +32,10 @@ class Foxes(animal.Mammal,animal.DenInhabitant):
         """behaviours"""
         self.behaviour = behaviour.Behaviour(self)
         """memories"""
+        m_entertainment = need.Need("Entertainment", 3, 250)
+        m_entertainment.add_creating_action(self.vegetate, 0.001)
+        self.needs.add(m_entertainment)
+
     """basic actions"""
 
     """getters/setters"""

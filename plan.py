@@ -1,16 +1,53 @@
 import collections
 
-class PlanFactory():
-    def __init__(self):
-        pass
+class Requirement():
+    """
+    """
+    def __init__(self, a_name, a_fulfilling_func, a_requirement=None):
+        self.name = a_name
+        self.fulfilling_func = a_fulfilling_func
+        self.required_object = None
+        self.a_requirement = a_requirement
 
+    def met(self):
+        if self.required_object = None:
+            self.required_object = self.fulfilling_func()
+        return self.required_object != None
+
+class PlanFactory():
+
+    @staticmethod
+    def create_plan(a_strategy, a_need):
+        try:
+            m_plan = a_strategy.goals[a_need.name]
+        except KeyError:
+            m_plan = Plan()
+            m_plan.append(a_need.fulfillingAction)
+        return m_plan
+        
+class Strategy():
+    """
+    Contains all the plans an entity knows. Allows to operate on and sort them
+    """
+    def __init__(self):
+        self.plans = set()
+        self.goals = dict()
+
+    def add_plan(self, a_plan):
+        self.plans.add(a_plan)
+        self.goals[a_plan.goal] = a_plan
 
 class Plan(collections.deque):
     """
         Plans are used to store Queues of commands or even other plans.
     """
-    def __init__(self):
+    def __init__(self, a_goal = ""):
         collections.deque.__init__(self)
+        self.goal = ""
+
+    def __call__(self):
+        self.execute()
+
     def execute(self):
         command = self.popleft()
         command.execute()
@@ -27,9 +64,14 @@ class Command():
     """
         Commands are the smalest unit. They can be executed by an entity.
     """
-    def __init__(self,a_entity):
+    def __init__(self,a_entity, a_requirement=None):
         self.finished = False
         self.entity = a_entity
+        self.requirement = a_requirement
+
+    def __call__(self):
+        self.execute()
+
     def execute(self):
         pass
 
