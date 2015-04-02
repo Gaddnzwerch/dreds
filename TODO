@@ -2,6 +2,8 @@
     + every plan has to have some goal - matching a need or a requirement
     o every plan has to consist of one or more steps to reach that goal
     o need to manage requirements / prerequisits
+        o requirements / prerequisits have to be connected to commands
+        o commands have to be connected to methods
     o an entity can rate the effectiveness of that plan to reach that goal
     o it should be possible to change and modify plans
     o needs trigger plans
@@ -53,3 +55,4 @@
 - making actions dependend of contruction of bodies
 - feedback to actions (satisfaction, pain, ...)
 - change internal states from attributes to objects
+- reorganize needs and requirements (management-objects with access-methods

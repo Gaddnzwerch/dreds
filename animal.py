@@ -28,18 +28,15 @@ class Animal(entity.Entity):
 
     def __init__(self):
         entity.Entity.__init__(self)
-        """logical states"""
-        #self.__location = location.Location()
-        """phyisical attributes"""
+        #phyisical attributes
         self.speed = 3 #should be used by implementing class
         self.strength = 0 #should be used by implementing class
         self.agility = 5 #should be used by implementing class
-        """basic physical states"""
-        self.age = 0
+        #basic physical states
         self.hunger = 0
         self.exhaust = 0
         self.dirty = 0
-        """memory functions"""
+        #memory functions
         self.noticed = set()
         self.same_species = set()
         self.plans = plan.Plan()
@@ -53,8 +50,14 @@ class Animal(entity.Entity):
         """vegetative actions"""
         self.vegetative_actions = set() 
         """needs"""
-        self.needsAttention = set()
+        self.needsAttention = set() 
         self.needs = set()
+        """requirements"""
+        self.requirements = [] 
+        """commands"""
+        self.commands = set()
+
+        #TODO has to be moved to a builder=====================================
         m_breathing = need.Need("Air", 10, 100, 50)
         m_breathing.add_fulfilling_action(self.breathe,10.0)
         m_breathing.add_creating_action(self.vegetate, 1.0)
@@ -65,15 +68,11 @@ class Animal(entity.Entity):
         m_eating.add_creating_action(self.vegetate, 0.01)
         m_eating.add_creating_action(self.move, 0.05)
         self.needs.add(m_eating)
-        """requirements"""
-        self.requirements = []
         m_food_place = plan.Requirement("foodplace", self.get_best_food_place)
-        self.requirements.append(m_food_source)
+        self.requirements.append(m_food_place)
         m_food_source = plan.Requirement("foodsource",self.choose_food_source,m_food_place) 
         self.requirements.append(m_food_source)
-        """commands"""
-        self.commands = set()
-        self.commands.add(plan.Move)
+        #TODO =================================================================
 
     def check_needs(self):
         for m_need in self.needs: 

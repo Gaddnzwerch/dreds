@@ -10,7 +10,7 @@ class Requirement():
         self.a_requirement = a_requirement
 
     def met(self):
-        if self.required_object = None:
+        if self.required_object == None:
             self.required_object = self.fulfilling_func()
         return self.required_object != None
 
@@ -44,6 +44,8 @@ class Plan(collections.deque):
     def __init__(self, a_goal = ""):
         collections.deque.__init__(self)
         self.goal = ""
+        self.complete = False
+        self.executed = 0
 
     def __call__(self):
         self.execute()
@@ -52,7 +54,7 @@ class Plan(collections.deque):
         command = self.popleft()
         command.execute()
         if command.finished:
-            pass
+            self.executed += 1 
         else:
             self.appendleft(command)
     #TODO modify a plan
@@ -95,7 +97,6 @@ class Catch(Command):
         else:
             self.victim = None
             self.finished = True
-        
 
 class Feed(Command):
     def __init__(self,a_entity,a_nutrition):
