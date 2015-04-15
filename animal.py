@@ -72,6 +72,8 @@ class Animal(entity.Entity):
         self.requirements.append(m_food_place)
         m_food_source = plan.Requirement("foodsource",self.choose_food_source,m_food_place) 
         self.requirements.append(m_food_source)
+        m_food_access = plan.Requirement("foodaccess",self.access_food_source,m_food_source)
+        self.requirement.append(m_food_access)
         #TODO =================================================================
 
     def check_needs(self):

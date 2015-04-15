@@ -14,8 +14,7 @@ class Requirement():
             self.required_object = self.fulfilling_func()
         return self.required_object != None
 
-class PlanFactory():
-
+class PlanFactory(): 
     @staticmethod
     def create_plan(a_strategy, a_need):
         try:

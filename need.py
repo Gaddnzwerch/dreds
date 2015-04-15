@@ -3,11 +3,6 @@ import operator
 from collections import namedtuple
 Action = namedtuple("Action",["func","level"])
 
-class Requirement():
-    """
-    """
-    pass
-
 class Need():
     """
        Needs are things that are necessary for an entity to survive and be well.
