@@ -73,7 +73,7 @@ class Animal(entity.Entity):
         m_food_source = plan.Requirement("foodsource",self.choose_food_source,m_food_place) 
         self.requirements.append(m_food_source)
         m_food_access = plan.Requirement("foodaccess",self.access_food_source,m_food_source)
-        self.requirement.append(m_food_access)
+        self.requirements.append(m_food_access)
         #TODO =================================================================
 
     def check_needs(self):
@@ -107,6 +107,7 @@ class Animal(entity.Entity):
     def rate_plan(self, a_plan):
         """
         rating plans
+        Not implemented yet
         """
         pass
 
@@ -139,6 +140,7 @@ class Animal(entity.Entity):
         logging.debug("The " + type(self).__name__ + " is breathing")
 
 
+    #TODO GZ20151014 there has to be a better way
     def add_exhaust(self,a_change):
         self.exhaust += a_change
         if self.exhaust < 0:
@@ -158,6 +160,7 @@ class Animal(entity.Entity):
 
     @needFunctions
     def move(self,a_location):
+        """Move to the passed location."""
         m_vector = mathematics.Vector(self.location,a_location)
         if self.speed > 0:
             if m_vector.length >= self.speed:
@@ -169,6 +172,7 @@ class Animal(entity.Entity):
             logging.info('The ' + type(self).__name__ + ' is immobile!')
     
     def get_best_food_place(self):
+        """Find the best, known food-source and remeber it."""
         #TODO find some strategy here
         try:
             m_food_place = random.sample(self.food_places,1)[0] 
@@ -183,6 +187,7 @@ class Animal(entity.Entity):
 
     @needFunctions
     def rest(self):
+        """Active resting to reduce exhaustion."""
         logging.info('The '+ type(self).__name__ + ' rests')
         self.add_exhaust(-20)
         self.add_hunger(2)
@@ -208,6 +213,7 @@ class Animal(entity.Entity):
 
     @needFunctions
     def idle(self):
+        """Do nothing."""
         logging.info("The " + type(self).__name__ + " idles.")
         self.add_hunger(1)
         self.boredness += 1
@@ -215,6 +221,7 @@ class Animal(entity.Entity):
 
     @needFunctions
     def feed(self,a_nutrition):
+        """Consume the passed nutrition to reduce hunger."""
         logging.info("The " + type(self).__name__+ " feeds on the " + type(a_nutrition).__name__ + ". Remaining hunger: " + repr(self.hunger) + " " + repr(self.is_hungry()))
         self.add_exhaust(1)
         self.dirty += 10
@@ -224,6 +231,7 @@ class Animal(entity.Entity):
         a_nutrition.get_consumed()
 
     def percieve(self,a_sourrounding):
+        """Retrieve informations from the passed sourrounding."""
         #TODO just see everything in the same quadrant
         location = self.location
         for entity in a_sourrounding.quadrants[location.get_quadrant()].get_inhabitants():
@@ -235,6 +243,7 @@ class Animal(entity.Entity):
         self.unque()                       
 
     def unque(self):
+        """Remove inactive entities from memory-variables."""
         remove = set()
         for entity in self.noticed | self.food_sources | self.known:
             if not entity.active:
@@ -251,6 +260,7 @@ class Animal(entity.Entity):
             
     
     def examine(self,a_other):
+        """Examine the passed object and classify it."""
         if a_other not in self.known:
             if self.is_same_species(a_other):
                 self.same_species.add(a_other)
@@ -263,6 +273,7 @@ class Animal(entity.Entity):
             self.known.add(a_other)
 
     def enter(self,a_place):
+        """Enter the passed place."""
         self.inside = a_place
 
     def exit(self):
@@ -310,6 +321,7 @@ class Cannibal(Carnivore):
     def is_nutrition(self, a_entity):
         return super(Cannibal, self).is_nutrition(a_entity) or self.is_same_species(a_entity)
 
+#TODO GZ20151014 has to be relocated
 class FieldOfView(mathematics.Flat):
     def __init__(self, a_distance, a_angle):
         self.distance = a_distance
