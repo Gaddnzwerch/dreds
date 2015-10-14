@@ -10,7 +10,12 @@ class Location(mathematics.Point):
         super(Location,self).__init__(a_x,a_y,a_z)
 
     def get_quadrant(self):
-        return Quadrant(int(self.x/Quadrant.resolution),int(self.y/Quadrant.resolution),int(self.z/Quadrant.resolution))
+        try:
+            return Quadrant(int(self.x/Quadrant.resolution),int(self.y/Quadrant.resolution),int(self.z/Quadrant.resolution))
+        except TypeError as e:
+            logging.error(format(e))
+            logging.error("Passed object: " + format(self.x) + "," + format(self.y) + "," + format(self.z))
+            raise
 
     def get_distance(self,a_location): 
         return Line(self.get_array(),a_location.get_array()).distance()

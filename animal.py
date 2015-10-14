@@ -9,9 +9,7 @@ import random
 import need
 from functools import wraps
 
-"""
-    Decorators
-"""
+#Decorators ===================================================================
 def needFunctions(func):
     @wraps(func)
     def checkNeedsFirst(*args):
@@ -21,9 +19,7 @@ def needFunctions(func):
         func(*args)
     return checkNeedsFirst
 
-"""
-    Classes
-"""
+#Classes ======================================================================
 class Animal(entity.Entity):
 
     def __init__(self):
@@ -148,15 +144,6 @@ class Animal(entity.Entity):
         elif self.exhaust >= self.maxExhaust:
             self.collapse()
 
-    @needFunctions
-    def move(self):
-        logging.info('The ' + type(self).__name__ + ' moves')
-        self.add_hunger(5)
-        self.add_exhaust(10)
-        self.boredness -= 5
-        #TODO has to depend on personality
-        self.satisfaction += 1
-        self.dirty += 1
 
     @needFunctions
     def move(self,a_location):
