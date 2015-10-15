@@ -9,13 +9,32 @@ class Need():
     """
     def __init__(self, a_name, a_severity, a_threshold, a_action_threshold=1000):
         self.name = a_name
-        self.severity = a_severity # on a scale from 1 (nice to have) to 10 (totally necessary)
+        self.__severity = a_severity # on a scale from 1 (nice to have) to 10 (totally necessary)
         self.__level = 0.0 # on a scale from 0 to 100
         self.threshold = a_threshold # if weight > threshold entity is aware of the need
-        self.action_threshold = a_action_threshold
+        self.action_threshold = a_action_threshold #1000 means no automatic action can be triggered
         self.action = dict()
         self.__fulfillingAction = None # stored in object to avoid costly sorting of self.action
 
+    def __str__(self):
+        return self.name + ":" + repr(self.level)
+
+    @property
+    def severity(self):
+        return self.__severity
+
+    @severity.setter
+    def severity(self, a_severity):
+        if a_severity > 10:
+            self.__severity = 10
+        elif a_severity <= 0:
+            self.__severity = 0
+        else:
+            self.__severity = a_severity 
+
+    @property
+    def needsAttention(self):
+        return self.weight > self.threshold
 
     @property
     def needsAction(self):
