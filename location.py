@@ -13,8 +13,8 @@ class Location(mathematics.Point):
         try:
             return Quadrant(int(self.x/Quadrant.resolution),int(self.y/Quadrant.resolution),int(self.z/Quadrant.resolution))
         except TypeError as e:
-            logging.error(format(e))
-            logging.error("Passed object: " + format(self.x) + "," + format(self.y) + "," + format(self.z))
+            logging.error(e)
+            logging.error("Passed object: " + type(self).__name__ + " - " + format(self.x) + "," + format(self.y) + "," + format(self.z))
             raise
 
     def get_distance(self,a_location): 
@@ -112,8 +112,8 @@ class LocationFactory:
             Creates a random location in a given quadrant.
         """
         randomint = random.randint
-        newX = randomint(a_quadrant.x * Quadrant.resolution, a_quadrant.x * (Quadrant.resolution) + Quadrant.resolution)
-        newY = randomint(a_quadrant.y * Quadrant.resolution, a_quadrant.y * (Quadrant.resolution) + Quadrant.resolution)
+        newX = randomint(a_quadrant.x * Quadrant.resolution, a_quadrant.x * (Quadrant.resolution) + Quadrant.resolution - 1)
+        newY = randomint(a_quadrant.y * Quadrant.resolution, a_quadrant.y * (Quadrant.resolution) + Quadrant.resolution - 1)
         try:
             newZ = randomint(a_quadrant.z * Quadrant.resolution, a_quadrant.z * (Quadrant.resolution + 1)-1)
         except ValueError:
